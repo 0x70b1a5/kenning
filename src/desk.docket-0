@@ -1,0 +1,10 @@
+:~
+  title+'Kenning'
+  info+'Memorization tool for text passages.'
+  color+0xba.bafe
+  glob-ames+[~zod 0v0]
+  base+'kenning'
+  version+[0 0 1]
+  license+'MIT'
+  website+'https://example.com'
+==
