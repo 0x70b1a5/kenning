@@ -15,9 +15,6 @@
 +$  card  card:agent:gall
 --
 ::
-+$  eyre-id  @ta
---
-::
 =|  state-0
 =*  state  -
 ::
@@ -65,7 +62,7 @@
 ++  on-arvo
   |=  [=wire =sign-arvo]
   ^-  (quip card _this)
-  ?+  sign-arvo  (on-arvo:def wire sign-arvo)
+  ?+  sign-arvo  (on-arvo:default wire sign-arvo)
       [%eyre %bound *]
     ~?  !accepted.sign-arvo
       [dap.bowl 'eyre bind rejected!' binding.sign-arvo]
@@ -76,7 +73,7 @@
   |=  =path
   ^-  (quip card _this)
   ?>  =(our.bowl src.bowl)
-  ?+  path  (on-watch:def path)
+  ?+  path  (on-watch:default path)
     [%http-response *]  [~ this]
   ==
 ::
@@ -101,9 +98,9 @@
     :: check your memorized text against the real one 
       %test
     ~&  >>  'testabunga'
-    =/  assay  (split text.action " ")
+    =/  assay  (split assay.action " ")
     =/  canon  (snag id.action texts.state)
-    ?:  (check canon assay)
+    ?:  =(canon assay)
       ~&  >  'you did it!'
       :_  state
       ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
@@ -113,6 +110,7 @@
     :: get text by id
       %get
     ~&  >>  'gettonimo'
+    ~&  >>>  (snag +.action texts.state)
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
     :: see all texts
@@ -123,9 +121,11 @@
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
   ==
 ++  check  :: compares a list of cords to a list of cords
+  :: turns out you can actually just do this with ?=
+  :: never mind
   |=  [canon=(list @t) assay=(list @t)]
   ?:  !=((lent assay) (lent canon))
-    &~  >>>  'lengths not equal'
+  ~&  >>>  'lengths not equal'
     %.n
   =/  i  0
   |-
@@ -135,7 +135,7 @@
       $(i (add 1 i))
     %.n
 ++  split  :: Split a cord recursively
-  |=  [original=(list @t) splitter=(list @t))
+  |=  [original=(list @t) splitter=(list @t)]
   =/  final  `(list (list @t))`~
   |-
     =/  i  (find splitter original)

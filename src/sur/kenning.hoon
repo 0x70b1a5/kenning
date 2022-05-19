@@ -1,7 +1,7 @@
 |%
 +$  action
   $%  [%add text=(list @t)]
-      [%test id=@ud try=(list @t)]
+      [%test id=@ud assay=(list @t)]
       [%get id=@ud]
       [%browse ~]
   ==
