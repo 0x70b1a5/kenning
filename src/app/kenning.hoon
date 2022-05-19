@@ -90,7 +90,7 @@
   |=  =action:kenning
   ^-  (quip card _state)
   ?-    -.action
-    ::
+    :: add a text to the library
       %add
     ~&  >>  'addarino'
     =/  kelvin  (lent (split text.action " "))
@@ -98,23 +98,42 @@
     =.  texts.state  (weld texts.state ~[[%ken id=id text=text.action kelvin=kelvin]])
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-    :: 
+    :: check your memorized text against the real one 
       %test
     ~&  >>  'testabunga'
+    =/  assay  (split text.action " ")
+    =/  canon  (snag id.action texts.state)
+    ?:  (check canon assay)
+      ~&  >  'you did it!'
+      :_  state
+      ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+    ~&  >  'try again'
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-    ::
+    :: get text by id
       %get
     ~&  >>  'gettonimo'
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-    ::
+    :: see all texts
       %browse
     ~&  >>  'browsario'
     ~&  >>>  state
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
   ==
+++  check  :: compares a list of cords to a list of cords
+  |=  [canon=(list @t) assay=(list @t)]
+  ?:  !=((lent assay) (lent canon))
+    &~  >>>  'lengths not equal'
+    %.n
+  =/  i  0
+  |-
+    ?:  (gth i (lent canon))
+      %.y
+    ?:  =((snag i canon) (snag i assay))
+      $(i (add 1 i))
+    %.n
 ++  split  :: Split a cord recursively
   |=  [original=(list @t) splitter=(list @t))
   =/  final  `(list (list @t))`~
