@@ -98,10 +98,17 @@
     :: check your memorized text against the real one 
       %test
     ~&  >>  'testabunga'
-    =/  assay  (split assay.action " ")
-    =/  canon  (snag id.action texts.state)
-    ?:  =(canon assay)
+    =/  canon  (get id.action)
+    ~&  >>  ~[%have assay.action]
+    ~&  >>  ~[%need text.canon]
+    ?:  =(text.canon assay.action)
       ~&  >  'you did it!'
+      ?:  =(kelvin.canon 0) :: kelvin goes down as you progress
+        :: if already 0, do nothing
+        :_  state
+        ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+      =.  kelvin.canon  (dec kelvin.canon) 
+      =.  texts.state  (snap texts.state id.action canon) :: set state to have lower kelvin for our text
       :_  state
       ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
     ~&  >  'try again'
@@ -110,7 +117,7 @@
     :: get text by id
       %get
     ~&  >>  'gettonimo'
-    ~&  >>>  (snag +.action texts.state)
+    ~&  >>>  (get +.action)
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
     :: see all texts
@@ -120,20 +127,9 @@
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
   ==
-++  check  :: compares a list of cords to a list of cords
-  :: turns out you can actually just do this with ?=
-  :: never mind
-  |=  [canon=(list @t) assay=(list @t)]
-  ?:  !=((lent assay) (lent canon))
-  ~&  >>>  'lengths not equal'
-    %.n
-  =/  i  0
-  |-
-    ?:  (gth i (lent canon))
-      %.y
-    ?:  =((snag i canon) (snag i assay))
-      $(i (add 1 i))
-    %.n
+++  get
+  |=  [id=@ud]
+  (snag id texts.state)
 ++  split  :: Split a cord recursively
   |=  [original=(list @t) splitter=(list @t)]
   =/  final  `(list (list @t))`~
