@@ -8,4 +8,5 @@
 +$  ken
   $%  [%ken id=@ud text=(list @t) kelvin=@u]
   ==
++$  kennings  (list ken)
 --

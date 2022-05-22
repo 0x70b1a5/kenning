@@ -1,72 +1,73 @@
-|_  [=bowl:gall ~]
-++  argue
-  |=  arg=[header-list:http (unit octs)]
-  ^-  (unit (unit mime))
-  =/  args=(unit (list [@t part:multipart]))
-    (de-request:multipart arg)
-  ?~  args  ~
-  ?.  ?=([~ [%image *] ~] args)  ~
-  =*  image=part:multipart  +.i.u.args
-  ?:  =('' body.image)  [~ ~]
-  ?~  type.image  ~
-  ``[(need type.image) (as-octs:mimes:html body.image)]
-::
+/-  kenning
+/+  rudder
+
+^-  (page:rudder kennings action)
+
+|_  $:  
+    =bowl:gall  
+    *
+    =kennings
+  ==  
+
 ++  build
-  |=  $:  arg=(list [k=@t v=@t])
-          msg=(unit [o=? =@t])
-      ==
-  ^-  manx
-  |^  page
-  ::
-  ++  style
-    '''
-    * { margin: 0.2em; padding: 0.2em; font-family: monospace; }
-    p { max-width: 50em; }
-    form { margin: 0; padding: 0; }
-    button { padding: 0.2em 0.5em; }
-    '''
-  ::
+  |=  
+    $:
+      args=(list [key=@t val=@t])
+      msg=(unit [gud=? txt=@t])
+    ==
+  ^-  reply:rudder
+  |^  [%page page]
   ++  page
     ^-  manx
     ;html
       ;head
-        ;title:"%picture"
-        ;meta(charset "utf-8");
-        ;meta(name "viewport", content "width=device-width, initial-scale=1");
-        ;style:"{(trip style)}"
+        ;title:"kenning"
+        ;style:"form \{ display: inline-block }"
+        ;meta(charset "utf-8")
+        ;meta(name "viewport", content "width=device-width, initial-scale=1")
       ==
       ;body
-        ;h2:"%picture selection"
-
-        Upload a new picture, or simply remove the existing one.
-
-        Your browser may cache the picture. If the old one sticks
-        around after uploading a new one, perform a hard refresh.
-
-        Be careful not to upload crazy big files, this could put
-        your ship under memory pressure.
-
-        ;+  ?~  msg  ;p:""
-            ?:  o.u.msg
-              ;p.green:"{(trip t.u.msg)}"
-            ;p.red:"{(trip t.u.msg)}"
-
-        ;form(method "post", enctype "multipart/form-data")
-          ;label
-            ;+  :/"image: "
-            ;input(type "file", name "image", accept "image/*");
-          ==
-          ;br;
-          ;button(type "submit"):"upload"
+        ;+  ?~  msg  :/""
+            ?:  gud.u.msg
+              ;div#status.green:"{(trip txt.u.msg)}"
+            ;div#status.red:"{(trip txt.u.msg)}"
+        ;ul 
+          ;*  %-  head 
+              %^  spin  kennings  0
+              |=  [k=ken i=@ud]
+              [(kenner k i) +(i)]
         ==
-
-        ;br;
-
-        ;form(method "post", enctype "multipart/form-data")
-          ;input(type "hidden", name "image");
-          ;button(type "submit"):"remove"
+        ;form(method "post")
+          ;textarea(name "ken", placeholder "Add a new text to memorize...")
+          ;input(type "submit", value "add", name "add")
         ==
+          ::;input(type "hidden", name "index", value "{(scow %ud i)}")
+      ==
+    ==
+  ++  kenner
+    |=  [k=ken i=@ud]
+    ;li
+      ;a(href id.k)
+        ;{(weld (scag 140 text.k) "...")}
+      ==
+      ;form(method "post")
+        ;input(type "submit", name "del", value "x")
+        ;input(type "hidden", name "index", value "{(scow %ud i)}")
       ==
     ==
   --
---
+++  argue
+  |=  [headers=header-list:http body=(unit octs)]
+  ^-  $@(brief:rudder action)
+  =/  args=(map @t @t)
+    ?~(body ~ (frisk:rudder q.u.body))
+  ?:  &((~(has by args) 'add') (~(has by args) 'ken'))
+    [%add text=(~(got by args) 'ken')]
+  ?.  &((~(has by args) 'del') (~(has by args) 'index'))
+    ~
+  ?~  ind=(rush (~(got by args) 'index') dem:ag)
+    ~
+  ?:  (gte u.ind (lent kennings))
+    'index out of range'
+  [%del u.ind]
+++  final  (alert:rudder 'kenning' build)

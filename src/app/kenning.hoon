@@ -1,7 +1,7 @@
 /-  kenning, webpage
-/+  server, verb, default-agent, dbug
+/+  server, verb, default-agent, dbug, rudder
 ::
-/~  webui  (webpage ~ (unit mime))  /app/kenning/webui
+/~  pages  (page:rudder texts action)  /app/kenning/webui
 ::
 |%
 +$  versioned-state
@@ -13,6 +13,8 @@
   ==
 ::
 +$  card  card:agent:gall
+::
++$  eyre-id  @ta
 --
 ::
 =|  state-0
@@ -87,7 +89,7 @@
   |=  =action:kenning
   ^-  (quip card _state)
   ?-    -.action
-    :: add a text to the library
+      :: add a text to the library
       %add
     ~&  >>  'addarino'
     =/  kelvin  (lent (split text.action " "))
@@ -95,7 +97,7 @@
     =.  texts.state  (weld texts.state ~[[%ken id=id text=text.action kelvin=kelvin]])
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-    :: check your memorized text against the real one 
+      :: check your memorized text against the real one 
       %test
     ~&  >>  'testabunga'
     =/  canon  (get id.action)
@@ -114,18 +116,43 @@
     ~&  >  'try again'
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-    :: get text by id
+      :: get text by id
       %get
     ~&  >>  'gettonimo'
     ~&  >>>  (get +.action)
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-    :: see all texts
+      :: see all texts
       %browse
     ~&  >>  'browsario'
     ~&  >>>  state
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+      :: the big one
+      %handle-http-request
+    ~&  >>  'handle http'
+    =;  (quip card:agent:gall _texts.state)
+      [-.out this(texts.state +.out)]
+    %.
+      :+  bowl
+        !<(order:rudder vase)
+      texts.state
+    %:  (steer:rudder _texts.state action)
+      pages
+      %:  point:rudder
+        /kenning
+        &
+        ~(key by pages)
+      ==
+      (fours:rudder texts.state)
+      |=  act=action
+      ^-  $@  brief:rudder
+          [brief:rudder (list crad:agent:gall) _texts.state]
+      ?-  -.act
+        %add  ``(snoc texts.state text.act)
+        %del  ``(oust [index.act 1] texts.state)
+      ==
+    ==
   ==
 ++  get
   |=  [id=@ud]
