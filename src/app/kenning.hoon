@@ -1,7 +1,7 @@
 /-  kenning, webpage
 /+  server, verb, default-agent, dbug, rudder
 ::
-/~  pages  (page:rudder texts action)  /app/kenning/webui
+/~  pages  (page:rudder texts action:kenning)  /app/kenning/webui
 ::
 |%
 +$  versioned-state

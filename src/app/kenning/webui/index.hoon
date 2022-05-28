@@ -1,4 +1,4 @@
-/-  kenning
+/-  *kenning
 /+  rudder
 
 ^-  (page:rudder kennings action)
