@@ -1,7 +1,7 @@
 :~
   title+'kenning'
   info+'Memorization tool for text passages.'
-  color+0xba.bafe
+  color+0xa5.9a2d
   site+/kenning
   image+'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Voiced_dental_fricative_%28vector%29.svg/1920px-Voiced_dental_fricative_%28vector%29.svg.png'
   base+'kenning'
