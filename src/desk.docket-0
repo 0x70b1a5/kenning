@@ -1,8 +1,9 @@
 :~
-  title+'Kenning'
+  title+'kenning'
   info+'Memorization tool for text passages.'
   color+0xba.bafe
-  glob-ames+[~zod 0v0]
+  site+/kenning
+  image+'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Voiced_dental_fricative_%28vector%29.svg/1920px-Voiced_dental_fricative_%28vector%29.svg.png'
   base+'kenning'
   version+[0 0 1]
   license+'MIT'

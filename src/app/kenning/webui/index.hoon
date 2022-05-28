@@ -22,9 +22,9 @@
     ;html
       ;head
         ;title:"kenning"
+        ;meta(charset "utf-8");
+        ;meta(name "viewport", content "width=device-width, initial-scale=1");
         ;style:"form \{ display: inline-block }"
-        ;meta(charset "utf-8")
-        ;meta(name "viewport", content "width=device-width, initial-scale=1")
       ==
       ;body
         ;+  ?~  msg  :/""
@@ -38,8 +38,8 @@
               [(kenner k i) +(i)]
         ==
         ;form(method "post")
-          ;textarea(name "ken", placeholder "Add a new text to memorize...")
-          ;input(type "submit", value "add", name "add")
+          ;textarea(name "ken", placeholder "Add a new text to memorize...");
+          ;input(type "submit", value "add", name "add");
         ==
           ::;input(type "hidden", name "index", value "{(scow %ud i)}")
       ==
@@ -48,11 +48,11 @@
     |=  [k=ken i=@ud]
     ;li
       ;a(href id.k)
-        ;{(weld (scag 140 text.k) "...")}
+        ; {(weld (scag 140 text.k) "...")}
       ==
       ;form(method "post")
-        ;input(type "submit", name "del", value "x")
-        ;input(type "hidden", name "index", value "{(scow %ud i)}")
+        ;input(type "submit", name "del", value "x");
+        ;input(type "hidden", name "index", value "{(scow %ud i)}");
       ==
     ==
   --
