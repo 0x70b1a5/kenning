@@ -62,7 +62,7 @@
     ::
       %handle-http-request
     ~&  >>  'handle http'
-    =;  (quip card:agent:gall _texts.state)
+    =;  out=(quip card:agent:gall _texts.state)
       [-.out this(texts.state +.out)]
     %.
       :+  bowl
@@ -71,21 +71,22 @@
     %:  (steer:rudder _texts.state action:kenning)
       pages
       %:  point:rudder
-        /kenning
-        &
-        ~(key by pages)
+        /kenning  :: base path
+        &  :: auth? 
+        ~(key by pages)  :: pages available
       ==
-      (fours:rudder texts.state)
-      |=  act=action:kenning
-      ^-  $@  brief:rudder
+      (fours:rudder texts.state)  :: fallback
+      |=  act=action:kenning  :: on POST
+      ^-  $@  brief:rudder  :: ?(failure-msg [success-msg effects updated-data])
           [brief:rudder (list card:agent:gall) _texts.state]
-      ?-  -.act
-        %add  ``(snoc texts.state [%ken id=(lent texts.state) text=+.act kelvin=(lent (split +.act " "))])
-        :: %get  ``texts.state
-        %browse  ``texts.state
-        :: %test 
+      :: ?-  -.act
+      ::   %add  ``(handle-action:main act)
+      ::   %get  ``(handle-action:main act)
+      ::   %browse  ``(handle-action:main act)
+        :: %test  ``(handle-action:main act)
         :: %del  ``(oust [index.act 1] texts.state)
-      ==
+      :: ==
+        ``texts:(handle-action:main act)
     ==
   ==
 ::
