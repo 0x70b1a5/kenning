@@ -10,13 +10,12 @@
   ==  
 
 ++  build
-  |=  
-    $:
-      args=(list [key=@t val=@t])
-      msg=(unit [gud=? txt=@t])
-    ==
+  |=  $:
+        args=(list [key=@t val=@t])
+        msg=(unit [gud=? txt=@t])
+      ==
   ^-  reply:rudder
-  |^  [%page page:rudder]
+  |^  [%page page]
   ++  page
     ^-  manx
     ;html
@@ -34,7 +33,7 @@
         ;ul 
           ;*  %-  head 
               %^  spin  kennings  0
-              |=  [k=ken i=@ud]
+              |=  [k=ken:kenning i=@ud]
               [(kenner k i) +(i)]
         ==
         ;form(method "post")
@@ -45,9 +44,9 @@
       ==
     ==
   ++  kenner
-    |=  [k=ken i=@ud]
+    |=  [k=ken:kenning i=@ud]
     ;li
-      ;a(href id.k)
+      ;a
         ; {(weld (scag 140 text.k) "...")}
       ==
       ;form(method "post")
@@ -66,15 +65,16 @@
   ?:  (~(has by args) 'browse')
     [%browse ~]
   ?:  &((~(has by args) 'get') (~(has by args) 'id'))
-    [%get id=(~(got by args) 'id')]
+    [%get id=`@ud`(~(got by args) 'id')]
   ?:  &((~(has by args) 'test') (~(has by args) 'id') (~(has by args) 'assay'))
-    [%test id=(~(got by args) 'id') assay=(~(got by args) 'assay')]
-  ?.  &((~(has by args) 'del') (~(has by args) 'index'))
-    ~
-  ?~  ind=(rush (~(got by args) 'index') dem:ag)
-    ~
-  ?:  (gte u.ind (lent kennings))
-    'index out of range'
-  [%del u.ind]
+    [%test id=`@ud`(~(got by args) 'id') assay=(trip (~(got by args) 'assay'))]
+  ~
+  :: ?.  &((~(has by args) 'del') (~(has by args) 'index'))
+  ::   ~
+  :: ?~  ind=(rush (~(got by args) 'index') dem:ag)
+  ::   ~
+  :: ?:  (gte u.ind (lent kennings))
+  ::   'index out of range'
+  :: [%del u.ind]
 ++  final  (alert:rudder 'kenning' build)
 --
