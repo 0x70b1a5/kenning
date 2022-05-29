@@ -68,7 +68,7 @@
       :+  bowl
         !<(order:rudder vase)
       texts.state
-    %:  (steer:rudder _texts.state action)
+    %:  (steer:rudder _texts.state action:kenning)
       pages
       %:  point:rudder
         /kenning
@@ -76,12 +76,15 @@
         ~(key by pages)
       ==
       (fours:rudder texts.state)
-      |=  act=action
+      |=  act=action:kenning
       ^-  $@  brief:rudder
           [brief:rudder (list card:agent:gall) _texts.state]
       ?-  -.act
-        %add  ``(snoc texts.state text.act)
-        %del  ``(oust [index.act 1] texts.state)
+        %add  ``(snoc texts.state [%ken id=(lent texts.state) text=+.act kelvin=(lent (split +.act " "))])
+        :: %get  ``texts.state
+        %browse  ``texts.state
+        :: %test 
+        :: %del  ``(oust [index.act 1] texts.state)
       ==
     ==
   ==
