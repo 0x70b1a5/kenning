@@ -1,12 +1,12 @@
-/-  *kenning
+/-  kenning
 /+  rudder
 
-^-  (page:rudder kennings action)
+^-  (page:rudder kennings:kenning action:kenning)
 
 |_  $:  
     =bowl:gall  
     *
-    =kennings
+    =kennings:kenning
   ==  
 
 ++  build
@@ -16,7 +16,7 @@
       msg=(unit [gud=? txt=@t])
     ==
   ^-  reply:rudder
-  |^  [%page page]
+  |^  [%page page:rudder]
   ++  page
     ^-  manx
     ;html
@@ -58,11 +58,17 @@
   --
 ++  argue
   |=  [headers=header-list:http body=(unit octs)]
-  ^-  $@(brief:rudder action)
+  ^-  $@(brief:rudder action:kenning)
   =/  args=(map @t @t)
     ?~(body ~ (frisk:rudder q.u.body))
   ?:  &((~(has by args) 'add') (~(has by args) 'ken'))
-    [%add text=(~(got by args) 'ken')]
+    [%add text=(trip (~(got by args) 'ken'))]
+  ?:  (~(has by args) 'browse')
+    [%browse ~]
+  ?:  &((~(has by args) 'get') (~(has by args) 'id'))
+    [%get id=(~(got by args) 'id')]
+  ?:  &((~(has by args) 'test') (~(has by args) 'id') (~(has by args) 'assay'))
+    [%test id=(~(got by args) 'id') assay=(~(got by args) 'assay')]
   ?.  &((~(has by args) 'del') (~(has by args) 'index'))
     ~
   ?~  ind=(rush (~(got by args) 'index') dem:ag)
@@ -71,3 +77,4 @@
     'index out of range'
   [%del u.ind]
 ++  final  (alert:rudder 'kenning' build)
+--

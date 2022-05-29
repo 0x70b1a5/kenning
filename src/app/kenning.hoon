@@ -1,7 +1,7 @@
 /-  kenning, webpage
 /+  server, verb, default-agent, dbug, rudder
 ::
-/~  pages  (page:rudder texts action:kenning)  /app/kenning/webui
+/~  pages  (page:rudder kennings:kenning action:kenning)  /app/kenning/webui
 ::
 |%
 +$  versioned-state
@@ -59,6 +59,31 @@
     =^  cards  state
     (handle-action:main !<(action:kenning vase))
     [cards this]
+    ::
+      %handle-http-request
+    ~&  >>  'handle http'
+    =;  (quip card:agent:gall _texts.state)
+      [-.out this(texts.state +.out)]
+    %.
+      :+  bowl
+        !<(order:rudder vase)
+      texts.state
+    %:  (steer:rudder _texts.state action)
+      pages
+      %:  point:rudder
+        /kenning
+        &
+        ~(key by pages)
+      ==
+      (fours:rudder texts.state)
+      |=  act=action
+      ^-  $@  brief:rudder
+          [brief:rudder (list card:agent:gall) _texts.state]
+      ?-  -.act
+        %add  ``(snoc texts.state text.act)
+        %del  ``(oust [index.act 1] texts.state)
+      ==
+    ==
   ==
 ::
 ++  on-arvo
@@ -128,31 +153,6 @@
     ~&  >>>  state
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-      :: the big one
-      %handle-http-request
-    ~&  >>  'handle http'
-    =;  (quip card:agent:gall _texts.state)
-      [-.out this(texts.state +.out)]
-    %.
-      :+  bowl
-        !<(order:rudder vase)
-      texts.state
-    %:  (steer:rudder _texts.state action)
-      pages
-      %:  point:rudder
-        /kenning
-        &
-        ~(key by pages)
-      ==
-      (fours:rudder texts.state)
-      |=  act=action
-      ^-  $@  brief:rudder
-          [brief:rudder (list crad:agent:gall) _texts.state]
-      ?-  -.act
-        %add  ``(snoc texts.state text.act)
-        %del  ``(oust [index.act 1] texts.state)
-      ==
-    ==
   ==
 ++  get
   |=  [id=@ud]
