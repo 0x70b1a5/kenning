@@ -34,7 +34,9 @@
   ^-  (quip card _this)
   ~&  >  '%kenning initialized successfully'
   =.  state  [%0 *(list ken:kenning)]
-  `this
+  :_  this
+  :~  [%pass /eyre/connect %arvo %e %connect [~ /[dap.bowl]] dap.bowl]
+  ==
 ++  on-save   !>(state)
 ::
 ++  on-load
@@ -46,8 +48,10 @@
 ++  on-poke
   |=  [=mark =vase]
   ^-  (quip card _this)
+  ~&  >  'poked'
   ?+  mark  (on-poke:default mark vase)
       %noun
+    ~&  >  'noun'
     ?+  q.vase  (on-poke:default mark vase)
         %print-state
       ~&  >>  state

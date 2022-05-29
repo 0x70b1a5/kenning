@@ -15,6 +15,7 @@
         msg=(unit [gud=? txt=@t])
       ==
   ^-  reply:rudder
+  ~&  >  'built'
   |^  [%page page]
   ++  page
     ^-  manx
@@ -46,14 +47,19 @@
   ++  kenner
     |=  [k=ken:kenning i=@ud]
     ;li
-      ;a
-        ; {(weld (scag 140 text.k) "...")}
+      ;a  :: (href "kenning" i)
+        ; {(clipper text.k)}
       ==
       ;form(method "post")
         ;input(type "submit", name "del", value "x");
         ;input(type "hidden", name "index", value "{(scow %ud i)}");
       ==
     ==
+  ++  clipper
+    |=  text=(list @t)
+    ?:  (gth (lent text) 140) 
+      (weld (scag 140 text) "...") 
+    text
   --
 ++  argue
   |=  [headers=header-list:http body=(unit octs)]
