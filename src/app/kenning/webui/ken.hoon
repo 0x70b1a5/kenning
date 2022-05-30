@@ -27,30 +27,28 @@
             ?:  gud.u.msg
               ;div#status.green:"{(trip txt.u.msg)}"
             ;div#status.red:"{(trip txt.u.msg)}"
-        ; {(test text.ken)}
+        :: ; {(tester text.ken)}
+        ;form(method "post")
+          ;*  ^-  marl
+              %+  spun  (split text.ken " ")
+              |=  [w=(list @t) i=@ud]
+              [(field w i) +(i)]
+        ==
         ;a(href "/kenning")
           back
         ==
       ==
     ==
-  ++  test
-    |=  canon=(list @t)
-    =/  words  (split canon " ")
-    ;form(method "post")
-      ; text
-      :: ;*  ^-  marl
-      ::     %+  spun  words 
-      ::     |=  [w=(list @t) i=@ud]
-      ::     [(field w i) +(i)]
-    ==
   ++  field
     |=  [word=(list @t) i=@ud]
+    ^-  manx
     ;div
-      ;input(type "text", name i);
+      ;input(type "text", name (scow %ud i));
       ;input(type "hidden", value word);
     ==
   ++  split  :: Split a cord recursively
     |=  [original=(list @t) splitter=(list @t)]
+    ^-  (list (list @t))
     =/  final  `(list (list @t))`~
     |-
     =/  i  (find splitter original)
