@@ -74,23 +74,40 @@
       texts.state
     %:  (steer:rudder _texts.state action:kenning)
       pages
-      %:  point:rudder
-        /kenning  :: base path
-        &  :: auth? 
-        ~(key by pages)  :: pages available
+      |=  =trail:rudder  :: a destructured path w a :site path and a file :ext (optional)
+      ^-  (unit place:rudder)  :: $place is either a %page or a redirect %away
+      ?~  site=(decap:rudder /kenning site.trail)  ~  :: remove '/kenning' from the url
+      ?+  u.site  ~
+      ::route       `[?(%page %away) auth? %page-name]
+        ~           `[%page & %index]  :: no trail - index
+        [%index ~]  `[%away (snip site.trail)]  :: redirect to /
+        [@ ~]       `[%page & %ken]
       ==
-      (fours:rudder texts.state)  :: fallback
-      |=  act=action:kenning  :: on POST
-      ^-  $@  brief:rudder  :: ?(failure-msg [success-msg effects updated-data])
-          [brief:rudder (list card:agent:gall) _texts.state]
-      :: ?-  -.act
-      ::   %add  ``(handle-action:main act)
-      ::   %get  ``(handle-action:main act)
-      ::   %browse  ``(handle-action:main act)
-        :: %test  ``(handle-action:main act)
-        :: %del  ``(oust [index.act 1] texts.state)
-      :: ==
-        ``texts:(handle-action:main act)
+    ::
+      |=  =order:rudder  ::  the "Fallback Function" (takes the full httpreq)
+      ^-  [[(unit reply:rudder) (list card:agent:gall)] _texts.state]
+      =;  msg=@t  [[`[%code 404 msg] ~] texts.state]
+      %+  rap  3
+      :~  'couldn\'t find that page, sorry'
+      ==
+    ::
+      |=  act=action:kenning
+      ^-  $@(@t [brief:rudder (list card:agent:gall) _texts.state])
+      ``texts:(handle-action:main act)
+
+      :: old: 'simple poke' et seq
+      :: (fours:rudder texts.state)  :: fallback
+      :: |=  act=action:kenning  :: on POST
+      :: ^-  $@  brief:rudder  :: ?(failure-msg [success-msg effects updated-data])
+      ::     [brief:rudder (list card:agent:gall) _texts.state]
+      :: :: ?-  -.act
+      :: ::   %add  ``(handle-action:main act)
+      :: ::   %get  ``(handle-action:main act)
+      :: ::   %browse  ``(handle-action:main act)
+      ::   :: %test  ``(handle-action:main act)
+      ::   :: %del  ``(oust [index.act 1] texts.state)
+      :: :: ==
+      ::   ``texts:(handle-action:main act)
     ==
   ==
 ::
@@ -159,6 +176,12 @@
       %browse
     ~&  >>  'browsario'
     ~&  >>>  state
+    :_  state
+    ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+      ::
+      %del
+    ~&  >>  'dellissimo'
+    =.  texts.state  (oust [id.action 1] texts.state)
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
   ==

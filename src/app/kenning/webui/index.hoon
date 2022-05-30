@@ -24,7 +24,7 @@
         ;title:"kenning"
         ;meta(charset "utf-8");
         ;meta(name "viewport", content "width=device-width, initial-scale=1");
-        ;style:"form \{ display: inline-block }"
+        ;style:"{(trip style)}"
       ==
       ;body
         ;+  ?~  msg  :/""
@@ -47,8 +47,11 @@
   ++  kenner
     |=  [k=ken:kenning i=@ud]
     ;li
-      ;a  :: (href "kenning" i)
-        ; {(clipper text.k)}
+      ; {(clipper text.k)}
+      ;a(href "kenning/{(scow %ud i)}")
+        ;span  
+          ; test
+        ==
       ==
       ;form(method "post")
         ;input(type "submit", name "del", value "x");
@@ -60,6 +63,16 @@
     ?:  (gth (lent text) 140) 
       (weld (scag 140 text) "...") 
     text
+  ++  style
+    '''
+    form { 
+      margin: 0; 
+      display: inline-block;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    '''
   --
 ++  argue
   |=  [headers=header-list:http body=(unit octs)]
@@ -74,13 +87,12 @@
     [%get id=`@ud`(~(got by args) 'id')]
   ?:  &((~(has by args) 'test') (~(has by args) 'id') (~(has by args) 'assay'))
     [%test id=`@ud`(~(got by args) 'id') assay=(trip (~(got by args) 'assay'))]
-  ~
-  :: ?.  &((~(has by args) 'del') (~(has by args) 'index'))
-  ::   ~
-  :: ?~  ind=(rush (~(got by args) 'index') dem:ag)
-  ::   ~
-  :: ?:  (gte u.ind (lent kennings))
-  ::   'index out of range'
-  :: [%del u.ind]
+  ?.  &((~(has by args) 'del') (~(has by args) 'index'))
+    ~
+  ?~  ind=(rush (~(got by args) 'index') dem:ag)
+    ~
+  ?:  (gte u.ind (lent kennings))
+    'index out of range'
+  [%del u.ind]
 ++  final  (alert:rudder 'kenning' build)
 --
