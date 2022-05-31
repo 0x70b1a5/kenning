@@ -1,5 +1,5 @@
 /-  kenning
-/+  rudder
+/+  rudder, kennables
 
 ^-  (page:rudder kennings:kenning action:kenning)
 
@@ -24,18 +24,33 @@
         ;title:"kenning"
         ;meta(charset "utf-8");
         ;meta(name "viewport", content "width=device-width, initial-scale=1");
-        ;style:"{(trip style)}"
+        ;style:"{(trip style:kennables)}"
       ==
       ;body
         ;+  ?~  msg  :/""
             ?:  gud.u.msg
               ;div#status.green:"{(trip txt.u.msg)}"
             ;div#status.red:"{(trip txt.u.msg)}"
-        ;ul 
-          ;*  %-  head 
-              %^  spin  kennings  0
-              |=  [k=ken:kenning i=@ud]
-              [(kenner k i) +(i)]
+        ;table
+          ;thead
+            ;tr
+              ;th
+                kelvin (max)
+              ==
+              ;th
+                kenning
+              ==
+              ;th
+                actions
+              ==
+            ==
+          ==
+          ;tbody 
+            ;*  %-  head 
+                %^  spin  kennings  0
+                |=  [k=ken:kenning i=@ud]
+                [(kenner k i) +(i)]
+          ==
         ==
         ;form(method "post")
           ;textarea(name "ken", placeholder "Add a new text to memorize...");
@@ -46,16 +61,19 @@
     ==
   ++  kenner
     |=  [k=ken:kenning i=@ud]
-    ;li
-      ; {(clipper text.k)}
-      ;a(href "kenning/{(scow %ud i)}")
-        ;span  
-          ; test
+    ;tr
+      ;td: {(scow %ud kelvin.k)} ({(scow %ud (lent (split:kennables text.k " ")))})
+      ;td: {(clipper text.k)}
+      ;td
+        ;a(href "kenning/{(scow %ud i)}")
+          ;span  
+            ; test
+          ==
         ==
-      ==
-      ;form(method "post")
-        ;input(type "submit", name "del", value "x");
-        ;input(type "hidden", name "index", value "{(scow %ud i)}");
+        ;form(method "post")
+          ;input(type "submit", name "del", value "x");
+          ;input(type "hidden", name "index", value "{(scow %ud i)}");
+        ==
       ==
     ==
   ++  clipper
@@ -63,16 +81,6 @@
     ?:  (gth (lent text) 140) 
       (weld (scag 140 text) "...") 
     text
-  ++  style
-    '''
-    form { 
-      margin: 0; 
-      display: inline-block;
-    }
-    * {
-      box-sizing: border-box;
-    }
-    '''
   --
 ++  argue
   |=  [headers=header-list:http body=(unit octs)]

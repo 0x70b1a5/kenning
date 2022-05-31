@@ -1,5 +1,5 @@
 /-  kenning
-/+  rudder
+/+  rudder, kennables
 
 ^-  (page:rudder kennings:kenning action:kenning)
 
@@ -15,77 +15,82 @@
     =/  decapt  (decap:rudder "/kenning/" ordo)
     =/  num  (slav %ud (head (tail decapt)))
     =/  ken  (snag num kennings)
+    =/  canon  (split:kennables text.ken " ")
+    =/  blanks  ?~  kelvin.ken  (lent canon)
+      (sub (lent canon) (dec kelvin.ken))
     ;html
       ;head
         ;title:"kenning"
         ;meta(charset "utf-8");
         ;meta(name "viewport", content "width=device-width, initial-scale=1");
-        ;style:"{(trip style)}"
+        ;style:"{(trip style:kennables)}"
       ==
       ;body
         ;+  ?~  msg  :/""
             ?:  gud.u.msg
               ;div#status.green:"{(trip txt.u.msg)}"
             ;div#status.red:"{(trip txt.u.msg)}"
-        :: ; {(tester text.ken)}
         ;form(method "post")
           ;*  ^-  marl
-              %+  spun  (split text.ken " ")
-              |=  [w=(list @t) i=@ud]
-              [(field w i) +(i)]
+              %-  head
+              %^  spin  canon  0
+              |=  [w=(list @t) b=@ud]
+              [(field-or-word w b blanks) +(b)]
+          ;input(type "hidden", name "id", value (scow %ud num));
         ==
         ;a(href "/kenning")
           back
         ==
       ==
     ==
+  ++  field-or-word
+    |=  [word=(list @t) index=@ud blanks=@ud]
+    ^-  manx
+    ?:  (lth index blanks)
+      (field word index)
+    ;span
+      ; {word}
+      ;input(type "hidden", name (scow %ud index), value word);
+    ==
   ++  field
     |=  [word=(list @t) i=@ud]
     ^-  manx
-    ;div
-      ;input(type "text", name (scow %ud i));
-      ;input(type "hidden", value word);
+    ;div.inline
+      ;input.guess(type "text", name (scow %ud i), placeholder "...");
     ==
-  ++  split  :: Split a cord recursively
-    |=  [original=(list @t) splitter=(list @t)]
-    ^-  (list (list @t))
-    =/  final  `(list (list @t))`~
-    |-
-    =/  i  (find splitter original)
-    ?~  i
-      (snoc final original)
-    =/  initial  (scag +.i original)
-    =/  sequential  (slag +(+.i) original)
-    ?~  initial
-      $(original sequential)
-    =.  final  (snoc final initial)
-    $(original sequential)
-  ++  style
-    '''
-    form { 
-      margin: 0; 
-      display: inline-block;
-    }
-    * {
-      box-sizing: border-box;
-    }
-    '''
   --
 ++  argue  :: called for POST reqs
   |=  [headers=header-list:http body=(unit octs)]
   ^-  $@(brief:rudder action:kenning)  :: error message, or user action
   =/  args=(map @t @t)
     ?~(body ~ (frisk:rudder q.u.body))
-::
-  ?:  &((~(has by args) 'test') (~(has by args) 'assay'))
-    [%test id=`@ud`(~(got by args) 'id') assay=(trip (~(got by args) 'assay'))]
-::
-  ?.  &((~(has by args) 'del') (~(has by args) 'index'))
+  ~&  >  'received submission:'
+  ~&  >  args
+  ?.  (~(has by args) 'id')
     ~
-  ?~  ind=(rush (~(got by args) 'index') dem:ag)
+  =/  id  (slav %ud (~(got by args) 'id'))
+  ?:  (gte id (lent kennings))
     ~
-  ?:  (gte u.ind (lent kennings))
-    'index out of range'
-  [%del u.ind]
+  =/  canon  text:(snag id kennings)
+  =/  assay  ""
+  =/  i=@ud  0
+  |-  :: build the tape representing our submission
+  ?.  (~(has by args) -:(scow %ud i))
+    :: tail because the below nonsense adds a  space in front
+    [%test id=id assay=(tail assay)] 
+    :: sorry about this
+  $(assay (weld assay (weld " " (trip (~(got by args) (crip (scow %ud i)))))), i +(i))
+    :: (trip (~(got by args) (crip (scow %ud i))))
+::
+::   ?:  &((~(has by args) 'test') (~(has by args) 'assay'))
+::     [%test id=`@ud`(~(got by args) 'id') assay=(trip (~(got by args) 'assay'))]
+:: ::
+::   ?.  &((~(has by args) 'del') (~(has by args) 'index'))
+::     ~
+::   ?~  ind=(rush (~(got by args) 'index') dem:ag)
+::     ~
+::   ?:  (gte u.ind (lent kennings))
+::     'index out of range'
+::   [%del u.ind]
 ++  final  (alert:rudder 'kenning' build)
 --

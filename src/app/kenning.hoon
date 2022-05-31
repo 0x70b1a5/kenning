@@ -1,5 +1,5 @@
 /-  kenning, webpage
-/+  server, verb, default-agent, dbug, rudder
+/+  server, verb, default-agent, dbug, rudder, kennables
 ::
 /~  pages  (page:rudder kennings:kenning action:kenning)  /app/kenning/webui
 ::
@@ -142,7 +142,7 @@
       :: add a text to the library
       %add
     ~&  >>  'addarino'
-    =/  kelvin  (lent (split text.action " "))
+    =/  kelvin  (lent (split:kennables text.action " "))
     =/  id  (lent texts.state)
     =.  texts.state  (weld texts.state ~[[%ken id=id text=text.action kelvin=kelvin]])
     :_  state
@@ -178,7 +178,7 @@
     ~&  >>>  state
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-      ::
+      :: delete
       %del
     ~&  >>  'dellissimo'
     =.  texts.state  (oust [id.action 1] texts.state)
@@ -188,17 +188,4 @@
 ++  get
   |=  [id=@ud]
   (snag id texts.state)
-++  split  :: Split a cord recursively
-  |=  [original=(list @t) splitter=(list @t)]
-  =/  final  `(list (list @t))`~
-  |-
-    =/  i  (find splitter original)
-    ?~  i
-      (snoc final original)
-    =/  initial  (scag +.i original)
-    =/  sequential  (slag +(+.i) original)
-    ?~  initial
-      $(original sequential)
-    =.  final  (snoc final initial)
-    $(original sequential)
 --
