@@ -75,10 +75,8 @@
     %:  (steer:rudder _texts.state action:kenning)
       pages
       |=  =trail:rudder  :: a destructured path w a :site path and a file :ext (optional)
-      ~&  >>>  trail
       ^-  (unit place:rudder)  :: $place is either a %page or a redirect %away
       ?~  site=(decap:rudder /kenning site.trail)  ~  :: remove '/kenning' from the url
-      ~&  >>>  site
       ?+  u.site  ~
       ::route       `[?(%page %away) auth? %page-name]
         ~           `[%page & %index]  :: no trail - index
@@ -169,10 +167,8 @@
       ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
     ~&  >  'try again'
     :: on fail, succ kelvin if poss
-    ?.  (gte kelvin.canon (lent split:kennables text.canon " "))
-      :_  state
-      ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-    =.  kelvin.canon  (succ kelvin.canon)
+    =.  kelvin.canon  (min (succ kelvin.canon) (lent (split:kennables text.canon " ")))
+    ~&  >  kelvin.canon
     =.  texts.state  (snap texts.state id.action canon)
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]

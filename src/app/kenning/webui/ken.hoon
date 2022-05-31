@@ -16,8 +16,7 @@
     =/  num  (slav %ud (head (tail decapt)))
     =/  ken  (snag num kennings)
     =/  canon  (split:kennables text.ken " ")
-    =/  blanks  ?~  kelvin.ken  (lent canon)
-      (sub (lent canon) (dec kelvin.ken))
+    =/  blanks  (sub (lent canon) kelvin.ken)
     ;html
       ;head
         ;title:"kenning"
@@ -47,6 +46,8 @@
   ++  field-or-word
     |=  [word=(list @t) index=@ud blanks=@ud]
     ^-  manx
+    ~&  index
+    ~&  blanks
     ?:  (lth index blanks)
       (field word index)
     ;span
@@ -57,7 +58,7 @@
     |=  [word=(list @t) i=@ud]
     ^-  manx
     ;div.inline
-      ;input.guess(type "text", name (scow %ud i), placeholder "...");
+      ;input.guess(type "text", name (scow %ud i), placeholder "...", autofocus "", autocomplete "off");
     ==
   --
 ++  argue  :: called for POST reqs
@@ -97,10 +98,6 @@
 ::  success=%.y if both +argue and +solve succeeded
 ::  brief might have a status message
 |=  [success=? =brief:rudder]
-~&  >  'brief'
-~&  >  brief
-~&  >  'order'
-~&  >  order
 ^-  reply:rudder
 :: on error, generic build page
 ?.  success  (build ~ `[| `@t`brief])
