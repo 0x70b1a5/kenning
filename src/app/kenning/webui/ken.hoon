@@ -37,6 +37,7 @@
               |=  [w=(list @t) b=@ud]
               [(field-or-word w b blanks) +(b)]
           ;input(type "hidden", name "id", value (scow %ud num));
+          ;input(type "submit", value "check!");
         ==
         ;a(href "/kenning")
           back
@@ -92,5 +93,16 @@
 ::   ?:  (gte u.ind (lent kennings))
 ::     'index out of range'
 ::   [%del u.ind]
-++  final  (alert:rudder 'kenning' build)
+++  final
+::  success=%.y if both +argue and +slve succeeded
+::  brief might have a status message
+|=  [success=? =brief:rudder]
+~&  >  'brief'
+~&  >  brief
+^-  reply:rudder
+:: on error, generic build page
+?.  success  (build ~ `[| `@t`brief])
+:: on success, re-GET the same page (aka 308) to prevent 'refresh -> re-POST'
+:: %next means re-GET
+[%next '' brief]
 --

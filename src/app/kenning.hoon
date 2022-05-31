@@ -75,13 +75,15 @@
     %:  (steer:rudder _texts.state action:kenning)
       pages
       |=  =trail:rudder  :: a destructured path w a :site path and a file :ext (optional)
+      ~&  >>>  trail
       ^-  (unit place:rudder)  :: $place is either a %page or a redirect %away
       ?~  site=(decap:rudder /kenning site.trail)  ~  :: remove '/kenning' from the url
+      ~&  >>>  site
       ?+  u.site  ~
       ::route       `[?(%page %away) auth? %page-name]
         ~           `[%page & %index]  :: no trail - index
         [%index ~]  `[%away (snip site.trail)]  :: redirect to /
-        [@ ~]       `[%page & %ken]
+        [@ud ~]       `[%page & %ken]
       ==
     ::
       |=  =order:rudder  ::  the "Fallback Function" (takes the full httpreq)
@@ -155,15 +157,23 @@
     ~&  >>  ~[%need text.canon]
     ?:  =(text.canon assay.action)
       ~&  >  'you did it!'
-      ?:  =(kelvin.canon 0) :: kelvin goes down as you progress
+      :: on pass, dec kelvin if poss
+      ?:  =(kelvin.canon 0) 
         :: if already 0, do nothing
         :_  state
         ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+      :: set state to have lower kelvin for our text
       =.  kelvin.canon  (dec kelvin.canon) 
-      =.  texts.state  (snap texts.state id.action canon) :: set state to have lower kelvin for our text
+      =.  texts.state  (snap texts.state id.action canon) 
       :_  state
       ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
     ~&  >  'try again'
+    :: on fail, succ kelvin if poss
+    ?.  (gte kelvin.canon (lent split:kennables text.canon " "))
+      :_  state
+      ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+    =.  kelvin.canon  (succ kelvin.canon)
+    =.  texts.state  (snap texts.state id.action canon)
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
       :: get text by id
