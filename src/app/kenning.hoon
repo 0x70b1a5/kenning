@@ -83,7 +83,7 @@
       ::route       `[?(%page %away) auth? %page-name]
         ~           `[%page & %index]  :: no trail - index
         [%index ~]  `[%away (snip site.trail)]  :: redirect to /
-        [@ud ~]       `[%page & %ken]
+        [@ ~]       `[%page & %ken]
       ==
     ::
       |=  =order:rudder  ::  the "Fallback Function" (takes the full httpreq)

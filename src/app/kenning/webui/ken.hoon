@@ -94,15 +94,20 @@
 ::     'index out of range'
 ::   [%del u.ind]
 ++  final
-::  success=%.y if both +argue and +slve succeeded
+::  success=%.y if both +argue and +solve succeeded
 ::  brief might have a status message
 |=  [success=? =brief:rudder]
 ~&  >  'brief'
 ~&  >  brief
+~&  >  'order'
+~&  >  order
 ^-  reply:rudder
 :: on error, generic build page
 ?.  success  (build ~ `[| `@t`brief])
 :: on success, re-GET the same page (aka 308) to prevent 'refresh -> re-POST'
 :: %next means re-GET
-[%next '' brief]
+=/  ordo  (trip url.request.order)
+=/  decapt  (decap:rudder "/kenning/" ordo)
+=/  num  (head (tail decapt))
+[%next num brief]
 --
