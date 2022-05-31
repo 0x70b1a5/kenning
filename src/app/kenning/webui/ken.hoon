@@ -11,8 +11,8 @@
   |^  [%page page]
   ++  page
     ^-  manx
-    =/  ordo  (trip url.request.order)
-    =/  decapt  (decap:rudder "/kenning/" ordo)
+    =/  ordo  (purse:rudder url.request.order)
+    =/  decapt  (decap:rudder /kenning site.ordo)
     =/  num  (slav %ud (head (tail decapt)))
     =/  ken  (snag num kennings)
     =/  canon  (split:kennables text.ken " ")
@@ -22,7 +22,7 @@
         ;title:"kenning"
         ;meta(charset "utf-8");
         ;meta(name "viewport", content "width=device-width, initial-scale=1");
-        ;style:"{(trip style:kennables)}"
+        ;style: {style:kennables}
       ==
       ;body
         ;+  ?~  msg  :/""
@@ -36,18 +36,17 @@
               |=  [w=(list @t) b=@ud]
               [(field-or-word w b blanks) +(b)]
           ;input(type "hidden", name "id", value (scow %ud num));
-          ;input(type "submit", value "check!");
+          ;input(type "submit", value "submit");
         ==
         ;a(href "/kenning")
           back
         ==
+        ;script: {scripts}
       ==
     ==
   ++  field-or-word
     |=  [word=(list @t) index=@ud blanks=@ud]
     ^-  manx
-    ~&  index
-    ~&  blanks
     ?:  (lth index blanks)
       (field word index)
     ;span
@@ -60,6 +59,25 @@
     ;div.inline
       ;input.guess(type "text", name (scow %ud i), placeholder "...", autofocus "", autocomplete "off");
     ==
+  ++  scripts
+  ^~
+  %-  trip
+  '''
+  //alert('this works!')
+  document.addEventListener('keydown', e => {
+    console.log(e)
+    if (e.key == ' ') {
+      e.preventDefault();
+      const inputs = document.getElementsByClassName('guess');
+      for (let i in inputs) {
+        if (document.activeElement.name == inputs[i].name && +i+1 < inputs.length ) {
+          inputs[+i+1].focus();
+          break;   
+        }
+      }
+    }
+  })
+  '''
   --
 ++  argue  :: called for POST reqs
   |=  [headers=header-list:http body=(unit octs)]
@@ -77,11 +95,16 @@
   =/  assay  ""
   =/  i=@ud  0
   |-  :: build the tape representing our submission
-  ?.  (~(has by args) -:(scow %ud i))
+  :: at kelvin 0 the last word also gets a " " added ... may want to fix this!
+  =/  j  (crip (scow %ud i))
+  ?.  &((~(has by args) j) !=(~ (~(got by args) j)))
     :: tail because the below nonsense adds a  space in front
     [%test id=id assay=(tail assay)] 
     :: sorry about this
-  $(assay (weld assay (weld " " (trip (~(got by args) (crip (scow %ud i)))))), i +(i))
+  %=  $
+    assay  (weld assay (weld " " (trip (~(got by args) j))))
+    i      +(i)
+  ==
     :: (trip (~(got by args) (crip (scow %ud i))))
 ::
 ::   ?:  &((~(has by args) 'test') (~(has by args) 'assay'))
@@ -95,16 +118,16 @@
 ::     'index out of range'
 ::   [%del u.ind]
 ++  final
-::  success=%.y if both +argue and +solve succeeded
-::  brief might have a status message
-|=  [success=? =brief:rudder]
-^-  reply:rudder
-:: on error, generic build page
-?.  success  (build ~ `[| `@t`brief])
-:: on success, re-GET the same page (aka 308) to prevent 'refresh -> re-POST'
-:: %next means re-GET
-=/  ordo  (trip url.request.order)
-=/  decapt  (decap:rudder "/kenning/" ordo)
-=/  num  (head (tail decapt))
-[%next num brief]
+  ::  success=%.y if both +argue and +solve succeeded
+  ::  brief might have a status message
+  |=  [success=? =brief:rudder]
+  ^-  reply:rudder
+  :: on error, generic build page
+  ?.  success  (build ~ `[| `@t`brief])
+  :: on success, re-GET the same page (aka 308) to prevent 'refresh -> re-POST'
+  :: %next means re-GET
+  =/  ordo  (purse:rudder url.request.order)
+  =/  decapt  (decap:rudder /kenning site.ordo)
+  =/  num  (slav %ud (head (tail decapt)))
+  [%next num brief]
 --

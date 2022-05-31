@@ -14,13 +14,25 @@
   =.  final  (snoc final initial)
   $(original sequential)
 ++  style
+  ^~
+  %-  trip
   '''
-  form { 
-    margin: 0; 
-    display: inline-block;
-  }
   * {
     box-sizing: border-box;
+    font-family: monospace;
+  }
+  .red { 
+    font-weight: bold;
+    color: #dd2222; 
+  }
+  .green { 
+    font-weight: bold; 
+    color: #229922; 
+  }
+  form { 
+    margin: 0 1em; 
+    padding: 0;
+    display: inline-block;
   }
   .inline {
     display: inline-block;
@@ -29,6 +41,7 @@
     margin: 0.5em 1em;
     border: none;
     border-bottom: 1px solid;
+    width: 10em;
   }
   '''
 --

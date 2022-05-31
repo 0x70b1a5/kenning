@@ -24,37 +24,51 @@
         ;title:"kenning"
         ;meta(charset "utf-8");
         ;meta(name "viewport", content "width=device-width, initial-scale=1");
-        ;style:"{(trip style:kennables)}"
+        ;style: {style:kennables}
       ==
       ;body
-        ;+  ?~  msg  :/""
-            ?:  gud.u.msg
-              ;div#status.green:"{(trip txt.u.msg)}"
-            ;div#status.red:"{(trip txt.u.msg)}"
-        ;table
-          ;thead
-            ;tr
-              ;th
-                kelvin (max)
-              ==
-              ;th
-                kenning
-              ==
-              ;th
-                actions
+        ;header
+          ;h2:"kenning"
+
+          Memorize passages of text.
+
+          Every passage is called a "ken". Every ken is assigned a kelvin
+          version based on its word count. You may test your knowledge by
+          filling in the blanks. As kelvin decreases, the number of blanks
+          increases.
+        ==
+        ;main
+          ;+  ?~  msg  :/""
+              ?:  gud.u.msg
+                ;div#status.green:"{(trip txt.u.msg)}"
+              ;div#status.red:"{(trip txt.u.msg)}"
+          ;table
+            ;thead
+              ;tr
+                ;th
+                  kelvin (max)
+                ==
+                ;th
+                  kenning
+                ==
+                ;th
+                  actions
+                ==
               ==
             ==
-          ==
-          ;tbody 
-            ;*  %-  head 
-                %^  spin  kennings  0
-                |=  [k=ken:kenning i=@ud]
-                [(kenner k i) +(i)]
+            ;tbody 
+              ;*  %-  head 
+                  %^  spin  kennings  0
+                  |=  [k=ken:kenning i=@ud]
+                  [(kenner k i) +(i)]
+            ==
           ==
         ==
-        ;form(method "post")
-          ;textarea(name "ken", placeholder "Add a new text to memorize...");
-          ;input(type "submit", value "add", name "add");
+        ;footer
+          ;form(method "post")
+            ;textarea(name "ken", placeholder "Add a new text to memorize...");
+            ;input(type "submit", value "add", name "add");
+          ==
         ==
           ::;input(type "hidden", name "index", value "{(scow %ud i)}")
       ==
@@ -65,11 +79,7 @@
       ;td: {(scow %ud kelvin.k)} ({(scow %ud (lent (split:kennables text.k " ")))})
       ;td: {(clipper text.k)}
       ;td
-        ;a(href "kenning/{(scow %ud i)}")
-          ;span  
-            ; test
-          ==
-        ==
+        ;a(href "kenning/{(scow %ud i)}"): test
         ;form(method "post")
           ;input(type "submit", name "del", value "x");
           ;input(type "hidden", name "index", value "{(scow %ud i)}");
