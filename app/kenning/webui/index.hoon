@@ -15,7 +15,6 @@
         msg=(unit [gud=? txt=@t])
       ==
   ^-  reply:rudder
-  ~&  >  'built'
   |^  [%page page]
   ++  page
     ^-  manx

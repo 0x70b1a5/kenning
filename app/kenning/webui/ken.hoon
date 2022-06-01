@@ -85,8 +85,6 @@
   ^-  $@(brief:rudder action:kenning)  :: error message, or user action
   =/  args=(map @t @t)
     ?~(body ~ (frisk:rudder q.u.body))
-  ~&  >  'received submission:'
-  ~&  >  args
   ?.  (~(has by args) 'id')
     ~
   =/  id  (slav %ud (~(got by args) 'id'))
@@ -118,11 +116,8 @@
   :: on success, re-GET the same page (aka 308) to prevent 'refresh -> re-POST'
   :: %next means re-GET
   =/  ordo  (purse:rudder url.request.order)
-  ~&  >  ordo
   =/  decapt  (decap:rudder /kenning site.ordo)
-  ~&  >  decapt
   =/  num  (head (tail decapt))
-  ~&  >  num
   =/  ken  (snag (slav %ud num) kennings)
   =/  brief  
     ?~  kelvin.ken

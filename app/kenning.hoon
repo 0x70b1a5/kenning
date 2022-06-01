@@ -48,10 +48,8 @@
 ++  on-poke
   |=  [=mark =vase]
   ^-  (quip card _this)
-  ~&  >  'poked'
   ?+  mark  (on-poke:default mark vase)
       %noun
-    ~&  >  'noun'
     ?+  q.vase  (on-poke:default mark vase)
         %print-state
       ~&  >>  state
@@ -59,13 +57,11 @@
     ==
     ::
       %kenning-action
-    ~&  >  %kenning-action
     =^  cards  state
     (handle-action:main !<(action:kenning vase))
     [cards this]
     ::
       %handle-http-request
-    ~&  >>  'handle http'
     =;  out=(quip card:agent:gall _texts.state)
       [-.out this(texts.state +.out)]
     %.
@@ -129,11 +125,8 @@
   ?-    -.action
       :: add a text to the library
       %add
-    ~&  >>  'addarino'
     =/  splat  (split:kennables text.action " ")
-    ~&  >  splat
     =/  splot  (join " " splat)
-    ~&  >>  splot
     =/  kelvin  (lent splat)
     =/  id  (lent texts.state)
     =/  kan  [%ken id=id text=text.action kelvin=kelvin]
@@ -141,12 +134,10 @@
       =.  texts.state  (weld texts.state ~[kan])
       :_  state
       ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-    ~&  >>>  'dupe check'
     ?:  %-  lien  :: don't add dupes
           :-  texts.state
           |=  kon=[@tas id=@ud text=tape kelvin=@ud]
           =(text.kan text.kon)
-      ~&  >>>  'text was a dupe'
       :_  state
       ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
     =.  texts.state  (weld texts.state ~[kan])
@@ -154,12 +145,8 @@
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
       :: check your memorized text against the real one 
       %test
-    ~&  >>  'testabunga'
     =/  canon  (get id.action)
-    ~&  >>  ~[%have assay.action]
-    ~&  >>  ~[%need text.canon]
     ?:  =((split:kennables text.canon " ") (split:kennables assay.action " "))
-      ~&  >  'test passed'
       :: on pass, dec kelvin if poss
       ?:  =(kelvin.canon 0) 
         :: if already 0, do nothing
@@ -170,7 +157,6 @@
       =.  texts.state  (snap texts.state id.action canon) 
       :_  state
       ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-    ~&  >  'test failed'
     :: on fail, succ kelvin if poss
     =.  kelvin.canon  
       %-  min 
@@ -182,19 +168,14 @@
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
       :: get text by id
       %get
-    ~&  >>  'gettonimo'
-    ~&  >>>  (get +.action)
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
       :: see all texts
       %browse
-    ~&  >>  'browsario'
-    ~&  >>>  state
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
       :: delete
       %del
-    ~&  >>  'dellissimo'
     =.  texts.state  (oust [id.action 1] texts.state)
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
