@@ -16,7 +16,7 @@
     =/  num  (slav %ud (head (tail decapt)))
     =/  ken  (snag num kennings)
     =/  canon  (split:kennables text.ken " ")
-    =/  blanks  (sub (lent canon) kelvin.ken)
+    =/  blanks  (max 1 (sub (lent canon) kelvin.ken))
     ;html
       ;head
         ;title:"kenning"
@@ -29,6 +29,7 @@
             ?:  gud.u.msg
               ;div#status.green:"{(trip txt.u.msg)}"
             ;div#status.red:"{(trip txt.u.msg)}"
+        ;h2:"kenning #{(scow %ud num)}, {(scow %ud kelvin.ken)}K"
         ;form(method "post")
           ;*  ^-  marl
               %-  head
@@ -94,29 +95,19 @@
   =/  canon  text:(snag id kennings)
   =/  assay  ""
   =/  i=@ud  0
-  |-  :: build the tape representing our submission
-  :: at kelvin 0 the last word also gets a " " added ... may want to fix this!
+  :: build the tape representing our submission
+  |-  
   =/  j  (crip (scow %ud i))
   ?.  &((~(has by args) j) !=(~ (~(got by args) j)))
-    :: tail because the below nonsense adds a  space in front
-    [%test id=id assay=(tail assay)] 
-    :: sorry about this
+    [%test id=id assay=assay] 
+  =/  word  (trip (~(got by args) j))
+  =/  next  ?~  word  ""  
+    ?.  (~(has by args) (crip (scow %ud +(i))))  word
+      (weld word " ")
   %=  $
-    assay  (weld assay (weld " " (trip (~(got by args) j))))
+    assay  (weld assay next)
     i      +(i)
   ==
-    :: (trip (~(got by args) (crip (scow %ud i))))
-::
-::   ?:  &((~(has by args) 'test') (~(has by args) 'assay'))
-::     [%test id=`@ud`(~(got by args) 'id') assay=(trip (~(got by args) 'assay'))]
-:: ::
-::   ?.  &((~(has by args) 'del') (~(has by args) 'index'))
-::     ~
-::   ?~  ind=(rush (~(got by args) 'index') dem:ag)
-::     ~
-::   ?:  (gte u.ind (lent kennings))
-::     'index out of range'
-::   [%del u.ind]
 ++  final
   ::  success=%.y if both +argue and +solve succeeded
   ::  brief might have a status message
@@ -127,7 +118,16 @@
   :: on success, re-GET the same page (aka 308) to prevent 'refresh -> re-POST'
   :: %next means re-GET
   =/  ordo  (purse:rudder url.request.order)
+  ~&  >  ordo
   =/  decapt  (decap:rudder /kenning site.ordo)
-  =/  num  (slav %ud (head (tail decapt)))
+  ~&  >  decapt
+  =/  num  (head (tail decapt))
+  ~&  >  num
+  =/  ken  (snag (slav %ud num) kennings)
+  =/  brief  
+    ?~  kelvin.ken
+      ?~  brief  '0K baby! you did it!'
+        (crip (weld (trip brief) ", also, good job on 0K!"))
+      brief
   [%next num brief]
 --

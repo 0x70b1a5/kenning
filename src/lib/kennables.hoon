@@ -30,7 +30,7 @@
     color: #229922; 
   }
   form { 
-    margin: 0 1em; 
+    margin: 0; 
     padding: 0;
     display: inline-block;
   }
@@ -42,6 +42,16 @@
     border: none;
     border-bottom: 1px solid;
     width: 10em;
+  }
+  .test {
+    margin: 1em;
+  }
+  textarea {
+    margin: 0 1em;
+    padding: 0; 
+    outline: none;
+    border: none;
+    border-bottom: 1px solid;
   }
   '''
 --

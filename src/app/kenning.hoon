@@ -74,9 +74,11 @@
       texts.state
     %:  (steer:rudder _texts.state action:kenning)
       pages
-      |=  =trail:rudder  :: a destructured path w a :site path and a file :ext (optional)
+      :: a destructured path w a :site path and a file :ext (optional)
+      |=  =trail:rudder  
       ^-  (unit place:rudder)  :: $place is either a %page or a redirect %away
-      ?~  site=(decap:rudder /kenning site.trail)  ~  :: remove '/kenning' from the url
+      :: remove '/kenning' from the url
+      ?~  site=(decap:rudder /kenning site.trail)  ~  
       ?+  u.site  ~
       ::route       `[?(%page %away) auth? %page-name]
         ~           `[%page & %index]  :: no trail - index
@@ -94,20 +96,6 @@
       |=  act=action:kenning
       ^-  $@(@t [brief:rudder (list card:agent:gall) _texts.state])
       ``texts:(handle-action:main act)
-
-      :: old: 'simple poke' et seq
-      :: (fours:rudder texts.state)  :: fallback
-      :: |=  act=action:kenning  :: on POST
-      :: ^-  $@  brief:rudder  :: ?(failure-msg [success-msg effects updated-data])
-      ::     [brief:rudder (list card:agent:gall) _texts.state]
-      :: :: ?-  -.act
-      :: ::   %add  ``(handle-action:main act)
-      :: ::   %get  ``(handle-action:main act)
-      :: ::   %browse  ``(handle-action:main act)
-      ::   :: %test  ``(handle-action:main act)
-      ::   :: %del  ``(oust [index.act 1] texts.state)
-      :: :: ==
-      ::   ``texts:(handle-action:main act)
     ==
   ==
 ::
@@ -144,7 +132,13 @@
     ~&  >>  'addarino'
     =/  kelvin  (lent (split:kennables text.action " "))
     =/  id  (lent texts.state)
-    =.  texts.state  (weld texts.state ~[[%ken id=id text=text.action kelvin=kelvin]])
+    =/  ken  [%ken id=id text=text.action kelvin=kelvin]
+    ?:  %-  levy  :: don't add dupes
+          :-  texts.state 
+          |=(k=ken:kenning !=(text.ken text.k))  
+      =.  texts.state  (weld texts.state ~[ken])
+      :_  state
+      ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
       :: check your memorized text against the real one 
@@ -154,7 +148,7 @@
     ~&  >>  ~[%have assay.action]
     ~&  >>  ~[%need text.canon]
     ?:  =(text.canon assay.action)
-      ~&  >  'you did it!'
+      ~&  >  'test passed'
       :: on pass, dec kelvin if poss
       ?:  =(kelvin.canon 0) 
         :: if already 0, do nothing
@@ -165,9 +159,12 @@
       =.  texts.state  (snap texts.state id.action canon) 
       :_  state
       ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-    ~&  >  'try again'
+    ~&  >  'test failed'
     :: on fail, succ kelvin if poss
-    =.  kelvin.canon  (min (succ kelvin.canon) (lent (split:kennables text.canon " ")))
+    =.  kelvin.canon  
+      %-  min 
+        :-  (succ kelvin.canon)
+        (lent (split:kennables text.canon " "))
     ~&  >  kelvin.canon
     =.  texts.state  (snap texts.state id.action canon)
     :_  state
