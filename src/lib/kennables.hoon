@@ -1,8 +1,8 @@
 |%
 ++  split  :: Split a cord recursively
-  |=  [original=(list @t) splitter=(list @t)]
-  ^-  (list (list @t))
-  =/  final  `(list (list @t))`~
+  |=  [original=tape splitter=tape]
+  ^-  (list tape)
+  =/  final  `(list tape)`~
   |-
   =/  i  (find splitter original)
   ?~  i

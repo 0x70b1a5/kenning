@@ -130,15 +130,26 @@
       :: add a text to the library
       %add
     ~&  >>  'addarino'
-    =/  kelvin  (lent (split:kennables text.action " "))
+    =/  splat  (split:kennables text.action " ")
+    ~&  >  splat
+    =/  splot  (join " " splat)
+    ~&  >>  splot
+    =/  kelvin  (lent splat)
     =/  id  (lent texts.state)
-    =/  ken  [%ken id=id text=text.action kelvin=kelvin]
-    ?:  %-  levy  :: don't add dupes
-          :-  texts.state 
-          |=(k=ken:kenning !=(text.ken text.k))  
-      =.  texts.state  (weld texts.state ~[ken])
+    =/  kan  [%ken id=id text=text.action kelvin=kelvin]
+    ?~  (lent texts.state)
+      =.  texts.state  (weld texts.state ~[kan])
       :_  state
       ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+    ~&  >>>  'dupe check'
+    ?:  %-  lien  :: don't add dupes
+          :-  texts.state
+          |=  kon=[@tas id=@ud text=tape kelvin=@ud]
+          =(text.kan text.kon)
+      ~&  >>>  'text was a dupe'
+      :_  state
+      ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+    =.  texts.state  (weld texts.state ~[kan])
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
       :: check your memorized text against the real one 
@@ -147,7 +158,7 @@
     =/  canon  (get id.action)
     ~&  >>  ~[%have assay.action]
     ~&  >>  ~[%need text.canon]
-    ?:  =(text.canon assay.action)
+    ?:  =((split:kennables text.canon " ") (split:kennables assay.action " "))
       ~&  >  'test passed'
       :: on pass, dec kelvin if poss
       ?:  =(kelvin.canon 0) 

@@ -1,13 +1,13 @@
 |%
 +$  action
-  $%  [%add text=(list @t)]
-      [%test id=@ud assay=(list @t)]
+  $%  [%add text=tape]
+      [%test id=@ud assay=tape]
       [%get id=@ud]
       [%browse ~]
       [%del id=@ud]
   ==
 +$  ken
-  $%  [%ken id=@ud text=(list @t) kelvin=@u]
+  $%  [%ken id=@ud text=tape kelvin=@u]
   ==
 +$  kennings  (list ken)
 --

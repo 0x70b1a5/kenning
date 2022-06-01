@@ -50,6 +50,7 @@
               ==
             ;thead
               ;tr
+                ;th;
                 ;th
                   kelvin (max)
                 ==
@@ -90,16 +91,18 @@
     |=  [k=ken:kenning i=@ud]
     ;tr
       ;td
+        ;form(method "post")
+          ;input(type "submit", name "del", value "x");
+          ;input(type "hidden", name "index", value "{(scow %ud i)}");
+        ==
+      ==
+      ;td
         {(scow %ud kelvin.k)} 
         ({(scow %ud (lent (split:kennables text.k " ")))})
       ==
       ;td: {(clipper text.k)}
       ;td
         ;a.test(href "kenning/{(scow %ud i)}"): test
-        ;form(method "post")
-          ;input(type "submit", name "del", value "x");
-          ;input(type "hidden", name "index", value "{(scow %ud i)}");
-        ==
       ==
     ==
   ++  clipper
