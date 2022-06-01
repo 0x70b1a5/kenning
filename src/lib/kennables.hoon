@@ -53,5 +53,8 @@
     border: none;
     border-bottom: 1px solid;
   }
+  th {
+    text-align: left;
+  }
   '''
 --

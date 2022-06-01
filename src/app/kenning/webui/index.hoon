@@ -97,8 +97,9 @@
         ==
       ==
       ;td
-        {(scow %ud kelvin.k)} 
-        ({(scow %ud (lent (split:kennables text.k " ")))})
+        ;+  ?~  kelvin.k  ;span.green: {(scow %ud kelvin.k)}
+          ;span: {(scow %ud kelvin.k)}
+        ;span: /{(scow %ud (lent (split:kennables text.k " ")))}
       ==
       ;td: {(clipper text.k)}
       ;td
