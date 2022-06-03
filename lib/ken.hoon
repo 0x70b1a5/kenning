@@ -44,7 +44,6 @@
     width: 10em;
   }
   .test {
-    margin: 1em;
   }
   textarea {
     margin: 0 1em;

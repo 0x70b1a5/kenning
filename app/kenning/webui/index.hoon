@@ -103,6 +103,7 @@
       ;td: {(clipper text.k)}
       ;td
         ;a.test(href "kenning/{(scow %ud i)}"): test
+        ;a.test(href "kenning/{(scow %ud i)}/edit"): edit
       ==
     ==
   ++  clipper

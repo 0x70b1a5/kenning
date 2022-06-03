@@ -76,10 +76,11 @@
       :: remove '/kenning' from the url
       ?~  site=(decap:rudder /kenning site.trail)  ~  
       ?+  u.site  ~
-      ::route       `[?(%page %away) auth? %page-name]
-        ~           `[%page & %index]  :: no trail - index
-        [%index ~]  `[%away (snip site.trail)]  :: redirect to /
-        [@ ~]       `[%page & %ken]
+      ::route        `[?(%page %away) auth? %page-name]
+        ~            `[%page & %index]  :: no trail - index
+        [%index ~]   `[%away (snip site.trail)]  :: redirect to /
+        [@ ~]        `[%page & %ken]
+        [@ %edit ~]  `[%page & %edit]
       ==
     ::
       |=  =order:rudder  ::  the "Fallback Function" (takes the full httpreq)
@@ -177,6 +178,11 @@
       :: delete
       %del
     =.  texts.state  (oust [id.action 1] texts.state)
+    :_  state
+    ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+      :: edit
+      %mod
+    =.  texts.state  (snap texts.state id.ken.action ken.action)
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
   ==

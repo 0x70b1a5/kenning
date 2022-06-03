@@ -16,10 +16,9 @@
     =/  num  (slav %ud (head (tail decapt)))
     =/  ken  (snag num kennings)
     =/  canon  (split:kennables text.ken " ")
-    =/  blanks  (max 1 (sub (lent canon) kelvin.ken))
     ;html
       ;head
-        ;title:"ken #{(scow %ud num)}"
+        ;title:"edit ken #{(scow %ud num)}"
         ;meta(charset "utf-8");
         ;meta(name "viewport", content "width=device-width, initial-scale=1");
         ;style: {style:kennables}
@@ -29,44 +28,30 @@
             ?:  gud.u.msg
               ;div#status.green:"{(trip txt.u.msg)}"
             ;div#status.red:"{(trip txt.u.msg)}"
-        ;h2:"kenning #{(scow %ud num)}, {(scow %ud kelvin.ken)}K"
+        ;h2:"editing kenning #{(scow %ud num)}"
         ;form(method "post")
+          ;div
+            ;input.guess(type "text", name "kelvin", placeholder "kelvin manual override", autocomplete "off", value (scow %ud kelvin.ken));
+          ==
           ;*  ^-  marl
               %-  head
               %^  spin  canon  0
               |=  [w=tape b=@ud]
-              [(field-or-word w b blanks) +(b)]
+              [(edit-field w b) +(b)]
           ;input(type "hidden", name "id", value (scow %ud num));
           ;input(type "submit", value "submit");
         ==
         ;a(href "/kenning")
           back
         ==
-        ;a(href "/kenning/{(scow %ud num)}/edit")
-          edit
-        ==
         ;script: {scripts}
       ==
     ==
-  ++  field-or-word
-    |=  [word=tape index=@ud blanks=@ud]
-    ^-  manx
-    :: ?:  (roll-blank index blanks)
-    ?:  (lth index blanks)
-      (field word index)
-    ;span
-      ; {word}
-      ;input(type "hidden", name (scow %ud index), value word);
-    ==
-  :: ++  roll-blank
-  ::   |=  [cur=@ud max=@ud]
-  ::   ^-  ?
-  ::   =/  total  (lent kennings)
-  ++  field
+  ++  edit-field
     |=  [word=tape i=@ud]
     ^-  manx
     ;div.inline
-      ;input.guess(type "text", name (scow %ud i), placeholder "...", autofocus "", autocomplete "off");
+      ;input.guess(type "text", name (scow %ud i), placeholder "...", autofocus "", autocomplete "off", value word);
     ==
   ++  scripts
   ^~
