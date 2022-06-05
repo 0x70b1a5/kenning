@@ -8,7 +8,7 @@
       [%mod ken=ken]
   ==
 +$  ken
-  $%  [%ken id=@ud text=tape kelvin=@u]
+  $%  [%ken id=@ud text=tape kelvin=@ud]
   ==
 +$  kennings  (list ken)
 --

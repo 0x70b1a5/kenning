@@ -15,7 +15,6 @@
     =/  decapt  (decap:rudder /kenning site.ordo)
     =/  num  (slav %ud (head (tail decapt)))
     =/  ken  (snag num kennings)
-    =/  canon  (split:kennables text.ken " ")
     ;html
       ;head
         ;title:"edit ken #{(scow %ud num)}"
@@ -31,56 +30,68 @@
         ;h2:"editing kenning #{(scow %ud num)}"
         ;form(method "post")
           ;div
+            ;label: ken
+            ;textarea
+                =id             "text"
+                =name           "text"
+                =placeholder    "enter your ken..."
+                =autofocus      ""
+                =autocomplete   "off"
+              ; {text.ken}
+            ==
+          ==
+          ;div
+            ;label: kelvin
             ;input.guess
-              =type          "text"
+              =id            "kelvin"
+              =type          "number"
+              =min           "0"
               =name          "kelvin"
               =placeholder   "kelvin manual override"
               =autocomplete  "off"
-              =value         (scow %ud kelvin.ken);
+              =value         (scow %ud kelvin.ken)
+              =disabled      "disabled";
+            ;input
+              =type     "checkbox"
+              =name     "autokel"
+              =id     "autokel"
+              =checked  "true";
+            ; automatic
           ==
-          ;*  ^-  marl
-              %-  head
-              %^  spin  canon  0
-              |=  [w=tape b=@ud]
-              [(edit-field w b) +(b)]
           ;input(type "hidden", name "id", value (scow %ud num));
           ;input(type "submit", value "submit");
         ==
-        ;a/"kenning/{(scow %ud num)}"
+        ;a/"/kenning/{(scow %ud num)}"
           back
         ==
         ;script: {scripts}
       ==
     ==
-  ++  edit-field
-    |=  [word=tape i=@ud]
-    ^-  manx
-    ;div.inline
-      ;input.guess
-        =type           "text"
-        =name           (scow %ud i)
-        =placeholder    "..."
-        =autofocus      ""
-        =autocomplete   "off"
-        =value          word;
-    ==
   ++  scripts
   ^~
   %-  trip
   '''
-  //alert('this works!')
-  document.addEventListener('keydown', e => {
-    console.log(e)
-    if (e.key == ' ') {
-      e.preventDefault();
-      const inputs = document.getElementsByClassName('guess');
-      for (let i in inputs) {
-        if (document.activeElement.name == inputs[i].name && +i+1 < inputs.length ) {
-          inputs[+i+1].focus();
-          break;   
-        }
-      }
+  const ak = document.getElementById('autokel')
+  const k = document.getElementById('kelvin')
+
+  ak.addEventListener('click', e => {
+    if (e.target.checked) {
+      k.setAttribute('disabled', 'disabled')
+    } else {
+      k.removeAttribute('disabled')
     }
+  })
+
+  const text = document.getElementById('text')
+
+  text.addEventListener('keyup', e => {
+    const newk = e.target.value
+      .replace(/\s+/g, ' ')
+      .trim()
+      .split(' ')
+      .length;
+
+    k.value = newk;
   })
   '''
   --
@@ -89,26 +100,21 @@
   ^-  $@(brief:rudder action:kenning)  :: error message, or user action
   =/  args=(map @t @t)
     ?~(body ~ (frisk:rudder q.u.body))
-  ?.  (~(has by args) 'id')
+  ~&  >  args
+  ?.  ?&  (~(has by args) 'id') 
+          (~(has by args) 'kelvin') 
+          (~(has by args) 'text')
+      ==
     ~
-  =/  id  (slav %ud (~(got by args) 'id'))
+  =/  id      (slav %ud (~(got by args) 'id'))
   ?:  (gte id (lent kennings))
-    ~
-  =/  i=@ud  0
-  =/  new  ""
-  :: build the tape representing the updated ken
-  |-  
-  =/  j  (crip (scow %ud i))
-  ?.  &((~(has by args) j) !=(~ (~(got by args) j)))
-  ::   [%test id=id assay=assay] 
-  :: =/  word  (trip (~(got by args) j))
-  :: =/  next  ?~  word  ""  
-  ::   ?.  (~(has by args) (crip (scow %ud +(i))))  word
-  ::     (weld word " ")
-  :: %=  $
-  ::   assay  (weld assay next)
-  ::   i      +(i)
-  :: ==
+    (crip "id {(scow %ud id)} is not valid")
+  =/  text  (trip (~(got by args) 'text'))
+  =/  kelvin  (slav %ud (~(got by args) 'kelvin'))
+  =/  kelmax  (lent (split:kennables text " "))
+  ?:  (gth kelvin kelmax)
+    (crip "maximum kelvin value for this ken is {(scow %ud kelmax)}")
+  [%mod ken=[%ken id=id text=text kelvin=kelvin]]
 ++  final
   ::  success=%.y if both +argue and +solve succeeded
   ::  brief might have a status message
@@ -121,11 +127,8 @@
   =/  ordo  (purse:rudder url.request.order)
   =/  decapt  (decap:rudder /kenning site.ordo)
   =/  num  (head (tail decapt))
-  =/  ken  (snag (slav %ud num) kennings)
   =/  brief  
-    ?~  kelvin.ken
-      ?~  brief  '0K baby! you did it!'
-        (crip (weld (trip brief) ", also, good job on 0K!"))
+    ?~  brief  'ken edited successfully.'
       brief
-  [%next num brief]
+  [%next '' brief]
 --
