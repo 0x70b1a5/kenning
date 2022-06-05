@@ -31,7 +31,12 @@
         ;h2:"editing kenning #{(scow %ud num)}"
         ;form(method "post")
           ;div
-            ;input.guess(type "text", name "kelvin", placeholder "kelvin manual override", autocomplete "off", value (scow %ud kelvin.ken));
+            ;input.guess
+              =type          "text"
+              =name          "kelvin"
+              =placeholder   "kelvin manual override"
+              =autocomplete  "off"
+              =value         (scow %ud kelvin.ken);
           ==
           ;*  ^-  marl
               %-  head
@@ -41,7 +46,7 @@
           ;input(type "hidden", name "id", value (scow %ud num));
           ;input(type "submit", value "submit");
         ==
-        ;a(href "/kenning")
+        ;a/"kenning/{(scow %ud num)}"
           back
         ==
         ;script: {scripts}
@@ -51,7 +56,13 @@
     |=  [word=tape i=@ud]
     ^-  manx
     ;div.inline
-      ;input.guess(type "text", name (scow %ud i), placeholder "...", autofocus "", autocomplete "off", value word);
+      ;input.guess
+        =type           "text"
+        =name           (scow %ud i)
+        =placeholder    "..."
+        =autofocus      ""
+        =autocomplete   "off"
+        =value          word;
     ==
   ++  scripts
   ^~
@@ -83,22 +94,21 @@
   =/  id  (slav %ud (~(got by args) 'id'))
   ?:  (gte id (lent kennings))
     ~
-  =/  canon  text:(snag id kennings)
-  =/  assay  ""
   =/  i=@ud  0
-  :: build the tape representing our submission
+  =/  new  ""
+  :: build the tape representing the updated ken
   |-  
   =/  j  (crip (scow %ud i))
   ?.  &((~(has by args) j) !=(~ (~(got by args) j)))
-    [%test id=id assay=assay] 
-  =/  word  (trip (~(got by args) j))
-  =/  next  ?~  word  ""  
-    ?.  (~(has by args) (crip (scow %ud +(i))))  word
-      (weld word " ")
-  %=  $
-    assay  (weld assay next)
-    i      +(i)
-  ==
+  ::   [%test id=id assay=assay] 
+  :: =/  word  (trip (~(got by args) j))
+  :: =/  next  ?~  word  ""  
+  ::   ?.  (~(has by args) (crip (scow %ud +(i))))  word
+  ::     (weld word " ")
+  :: %=  $
+  ::   assay  (weld assay next)
+  ::   i      +(i)
+  :: ==
 ++  final
   ::  success=%.y if both +argue and +solve succeeded
   ::  brief might have a status message
