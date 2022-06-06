@@ -1,5 +1,5 @@
 /-  kenning, webpage
-/+  server, verb, default-agent, dbug, rudder, kennables
+/+  server, verb, default-agent, dbug, rudder, kon
 ::
 /~  pages  (page:rudder kennings:kenning action:kenning)  /app/kenning/webui
 ::
@@ -125,9 +125,9 @@
   ^-  (quip card _state)
   ?-    -.action
       :: add a text to the library
+      ::
       %add
-    =/  splat  (split:kennables text.action " ")
-    =/  splot  (join " " splat)
+    =/  splat  (split:kon text.action " ")
     =/  kelvin  (lent splat)
     =/  id  (lent texts.state)
     =/  kan  [%ken id=id text=text.action kelvin=kelvin]
@@ -145,9 +145,16 @@
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
       :: check your memorized text against the real one 
+      ::
       %test
-    =/  canon  (get id.action)
-    ?:  =((split:kennables text.canon " ") (split:kennables assay.action " "))
+    ~&  >>  action
+    =/  canon  (snag id.action texts.state)
+    ~&  >>>  canon
+    =/  submish  (split:kon assay.action " ")
+    =/  answish  (split:kon text.canon " ")
+    ~&  >>  submish
+    ~&  >>  answish
+    ?:  =(answish submish)
       :: on pass, dec kelvin if poss
       ?:  =(kelvin.canon 0) 
         :: if already 0, do nothing
@@ -155,38 +162,31 @@
         ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
       :: set state to have lower kelvin for our text
       =.  kelvin.canon  (dec kelvin.canon) 
-      =.  texts.state  (snap texts.state id.action canon) 
-      :_  state
-      ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+      (handle-action [%mod ken=canon])
     :: on fail, succ kelvin if poss
-    =.  kelvin.canon  
-      %-  min 
-        :-  (succ kelvin.canon)
-        (lent (split:kennables text.canon " "))
-    ~&  >  kelvin.canon
-    =.  texts.state  (snap texts.state id.action canon)
-    :_  state
-    ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+    =.  kelvin.canon  (min (succ kelvin.canon) (lent answish))
+    (handle-action [%mod ken=canon])
       :: get text by id
+      ::
       %get
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
       :: see all texts
+      ::
       %browse
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
       :: delete
+      ::
       %del
     =.  texts.state  (oust [id.action 1] texts.state)
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
       :: edit
+      ::
       %mod
     =.  texts.state  (snap texts.state id.ken.action ken.action)
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
   ==
-++  get
-  |=  [id=@ud]
-  (snag id texts.state)
 --

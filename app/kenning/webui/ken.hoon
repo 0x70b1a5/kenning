@@ -1,5 +1,5 @@
 /-  kenning
-/+  rudder, kennables
+/+  rudder, kon
 
 ^-  (page:rudder kennings:kenning action:kenning)
 
@@ -15,14 +15,14 @@
     =/  decapt  (decap:rudder /kenning site.ordo)
     =/  num  (slav %ud (head (tail decapt)))
     =/  ken  (snag num kennings)
-    =/  canon  (split:kennables text.ken " ")
+    =/  canon  (split:kon text.ken " ")
     =/  blanks  (max 1 (sub (lent canon) kelvin.ken))
     ;html
       ;head
         ;title:"ken #{(scow %ud num)}"
         ;meta(charset "utf-8");
         ;meta(name "viewport", content "width=device-width, initial-scale=1");
-        ;style: {style:kennables}
+        ;style: {style:kon}
       ==
       ;body
         ;+  ?~  msg  :/""
@@ -59,10 +59,19 @@
       ; {word}
       ;input(type "hidden", name (scow %ud index), value word);
     ==
-  :: ++  roll-blank
-  ::   |=  [cur=@ud max=@ud]
-  ::   ^-  ?
-  ::   =/  total  (lent kennings)
+  ++  roll-blank
+    |=  [cur=@ud max=@ud]
+    ^-  ?
+    ?:  (gth cur max)
+      |
+    =/  dog  ~(. og eny.bowl)
+    =^  rol  dog  (rads:dog max)
+    =^  bol  dog  (rads:dog max)
+    =^  fol  dog  (rads:dog max)
+    ~&  >>>  rol
+    ~&  >>>  bol
+    ~&  >>>  fol
+    &
   ++  field
     |=  [word=tape i=@ud]
     ^-  manx
@@ -94,6 +103,7 @@
   ^-  $@(brief:rudder action:kenning)  :: error message, or user action
   =/  args=(map @t @t)
     ?~(body ~ (frisk:rudder q.u.body))
+  ~&  >  args
   ?.  (~(has by args) 'id')
     ~
   =/  id  (slav %ud (~(got by args) 'id'))
@@ -128,6 +138,8 @@
   =/  decapt  (decap:rudder /kenning site.ordo)
   =/  num  (head (tail decapt))
   =/  ken  (snag (slav %ud num) kennings)
+  ~&  >>>  'true'
+  ~&  >>>  ken
   =/  brief  
     ?~  kelvin.ken
       ?~  brief  '0K baby! you did it!'

@@ -1,5 +1,5 @@
 /-  kenning
-/+  rudder, kennables
+/+  rudder, kon
 
 ^-  (page:rudder kennings:kenning action:kenning)
 
@@ -20,7 +20,7 @@
         ;title:"edit ken #{(scow %ud num)}"
         ;meta(charset "utf-8");
         ;meta(name "viewport", content "width=device-width, initial-scale=1");
-        ;style: {style:kennables}
+        ;style: {style:kon}
       ==
       ;body
         ;+  ?~  msg  :/""
@@ -32,6 +32,8 @@
           ;div
             ;label: ken
             ;textarea
+                =cols           "80"
+                =rows           "40"
                 =id             "text"
                 =name           "text"
                 =placeholder    "enter your ken..."
@@ -42,10 +44,11 @@
           ==
           ;div
             ;label: kelvin
-            ;input.guess.hidden
+            ;input.guess
               =id            "kelvin"
               =type          "number"
               =min           "0"
+              =pattern       "\\d+"
               =name          "kelvin"
               =placeholder   "kelvin manual override"
               =autocomplete  "off"
@@ -70,17 +73,7 @@
   ^~
   %-  trip
   '''
-  const ak = document.getElementById('autokel')
   const k = document.getElementById('kelvin')
-
-  ak.addEventListener('click', e => {
-    if (e.target.checked) {
-      k.classList.add('hidden')
-    } else {
-      k.classList.remove('hidden')
-    }
-  })
-
   const text = document.getElementById('text')
 
   text.addEventListener('keyup', e => {
@@ -108,9 +101,10 @@
   =/  id      (slav %ud (~(got by args) 'id'))
   ?:  (gte id (lent kennings))
     (crip "id {(scow %ud id)} is not valid")
-  =/  text  (noline (trip (~(got by args) 'text')))
+  =/  text  (noline:kon (trip (~(got by args) 'text')))
+  ~&  >>>  text
   =/  kelvin  (slav %ud (~(got by args) 'kelvin'))
-  =/  kelmax  (lent (split:kennables text " "))
+  =/  kelmax  (lent (split:kon text " "))
   ?:  (gth kelvin kelmax)
     (crip "maximum kelvin value for this ken is {(scow %ud kelmax)}")
   [%mod ken=[%ken id=id text=text kelvin=kelvin]]

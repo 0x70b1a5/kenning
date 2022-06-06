@@ -1,5 +1,5 @@
 /-  kenning
-/+  rudder, kennables
+/+  rudder, kon
 
 ^-  (page:rudder kennings:kenning action:kenning)
 
@@ -23,7 +23,7 @@
         ;title:"kenning"
         ;meta(charset "utf-8");
         ;meta(name "viewport", content "width=device-width, initial-scale=1");
-        ;style: {style:kennables}
+        ;style: {style:kon}
       ==
       ;body
         ;header
@@ -98,7 +98,7 @@
       ;td
         ;+  ?~  kelvin.k  ;span.green: {(scow %ud kelvin.k)}
           ;span: {(scow %ud kelvin.k)}
-        ;span: /{(scow %ud (lent (split:kennables text.k " ")))}
+        ;span: /{(scow %ud (lent (split:kon text.k " ")))}
       ==
       ;td: {(clipper text.k)}
       ;td
