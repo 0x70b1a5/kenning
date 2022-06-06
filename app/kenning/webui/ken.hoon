@@ -37,6 +37,7 @@
               |=  [w=tape b=@ud]
               [(field-or-word w b blanks) +(b)]
           ;input(type "hidden", name "id", value (scow %ud num));
+          ;br;
           ;input(type "submit", value "submit");
         ==
         ;a(href "/kenning")

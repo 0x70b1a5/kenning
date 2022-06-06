@@ -13,6 +13,9 @@
     $(original sequential)
   =.  final  (snoc final initial)
   $(original sequential)
+++  noline  :: remove newlines
+  |=  t=tape
+  t
 ++  style
   ^~
   %-  trip
@@ -54,6 +57,9 @@
   }
   th {
     text-align: left;
+  }
+  .hidden {
+    visibility:hidden;
   }
   '''
 --

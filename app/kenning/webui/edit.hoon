@@ -42,21 +42,20 @@
           ==
           ;div
             ;label: kelvin
-            ;input.guess
+            ;input.guess.hidden
               =id            "kelvin"
               =type          "number"
               =min           "0"
               =name          "kelvin"
               =placeholder   "kelvin manual override"
               =autocomplete  "off"
-              =value         (scow %ud kelvin.ken)
-              =disabled      "disabled";
-            ;input
-              =type     "checkbox"
-              =name     "autokel"
-              =id     "autokel"
-              =checked  "true";
-            ; automatic
+              =value         (scow %ud kelvin.ken);
+            :: ;input
+            ::   =type     "checkbox"
+            ::   =name     "autokel"
+            ::   =id     "autokel"
+            ::   =checked  "true";
+            :: ; automatic
           ==
           ;input(type "hidden", name "id", value (scow %ud num));
           ;input(type "submit", value "submit");
@@ -76,9 +75,9 @@
 
   ak.addEventListener('click', e => {
     if (e.target.checked) {
-      k.setAttribute('disabled', 'disabled')
+      k.classList.add('hidden')
     } else {
-      k.removeAttribute('disabled')
+      k.classList.remove('hidden')
     }
   })
 
@@ -109,7 +108,7 @@
   =/  id      (slav %ud (~(got by args) 'id'))
   ?:  (gte id (lent kennings))
     (crip "id {(scow %ud id)} is not valid")
-  =/  text  (trip (~(got by args) 'text'))
+  =/  text  (noline (trip (~(got by args) 'text')))
   =/  kelvin  (slav %ud (~(got by args) 'kelvin'))
   =/  kelmax  (lent (split:kennables text " "))
   ?:  (gth kelvin kelmax)
