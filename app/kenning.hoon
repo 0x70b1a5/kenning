@@ -127,10 +127,11 @@
       :: add a text to the library
       ::
       %add
-    =/  splat  (split:kon text.action " ")
+    =/  text  (noline:kon text.action)
+    =/  splat  (split:kon text " ")
     =/  kelvin  (lent splat)
     =/  id  (lent texts.state)
-    =/  kan  [%ken id=id text=text.action kelvin=kelvin]
+    =/  kan  [%ken id=id text=text kelvin=kelvin]
     ?~  (lent texts.state)
       =.  texts.state  (weld texts.state ~[kan])
       :_  state
@@ -147,14 +148,8 @@
       :: check your memorized text against the real one 
       ::
       %test
-    ~&  >>  action
     =/  canon  (snag id.action texts.state)
-    ~&  >>>  canon
-    =/  submish  (split:kon assay.action " ")
-    =/  answish  (split:kon text.canon " ")
-    ~&  >>  submish
-    ~&  >>  answish
-    ?:  =(answish submish)
+    ?:  =((split:kon text.canon " ") (split:kon assay.action " "))
       :: on pass, dec kelvin if poss
       ?:  =(kelvin.canon 0) 
         :: if already 0, do nothing
@@ -164,7 +159,7 @@
       =.  kelvin.canon  (dec kelvin.canon) 
       (handle-action [%mod ken=canon])
     :: on fail, succ kelvin if poss
-    =.  kelvin.canon  (min (succ kelvin.canon) (lent answish))
+    =.  kelvin.canon  (min (succ kelvin.canon) (lent text.canon))
     (handle-action [%mod ken=canon])
       :: get text by id
       ::

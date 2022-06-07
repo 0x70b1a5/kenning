@@ -17,6 +17,11 @@
     =/  ken  (snag num kennings)
     =/  canon  (split:kon text.ken " ")
     =/  blanks  (max 1 (sub (lent canon) kelvin.ken))
+    =+  rng=~(. og eny.bowl)
+    =^  gaps  rng  
+      %^  spin  
+        (reap blanks 0)  rng
+      |=([n=@ rng=_og] (rads:rng (lent canon)))
     ;html
       ;head
         ;title:"ken #{(scow %ud num)}"
@@ -35,7 +40,7 @@
               %-  head
               %^  spin  canon  0
               |=  [w=tape b=@ud]
-              [(field-or-word w b blanks) +(b)]
+              [(field-or-word w b gaps) +(b)]
           ;input(type "hidden", name "id", value (scow %ud num));
           ;br;
           ;input(type "submit", value "submit");
@@ -50,28 +55,28 @@
       ==
     ==
   ++  field-or-word
-    |=  [word=tape index=@ud blanks=@ud]
+    |=  [word=tape index=@ud gaps=(list @ud)]
     ^-  manx
-    :: ?:  (roll-blank index blanks)
-    ?:  (lth index blanks)
-      (field word index)
-    ;span
-      ; {word}
-      ;input(type "hidden", name (scow %ud index), value word);
-    ==
-  ++  roll-blank
-    |=  [cur=@ud max=@ud]
-    ^-  ?
-    ?:  (gth cur max)
-      |
-    =/  dog  ~(. og eny.bowl)
-    =^  rol  dog  (rads:dog max)
-    =^  bol  dog  (rads:dog max)
-    =^  fol  dog  (rads:dog max)
-    ~&  >>>  rol
-    ~&  >>>  bol
-    ~&  >>>  fol
-    &
+    :: ?:  (roll-blank index blanks ~(. og eny.bowl))
+    :: ?:  (lth index blanks)
+    ?~  (find ~[index] gaps)
+      ;span
+        ; {word}
+        ;input(type "hidden", name (scow %ud index), value word);
+      ==
+    (field word index)
+  :: ++  roll-blank
+  ::   |=  [cur=@ud max=@ud rng=_og]
+  ::   ^-  ?
+  ::   ?:  (gth cur max)
+  ::     |
+  ::   =^  rol  rng  (rads:rng 10)
+  ::   =^  bol  rng  (rads:rng 10)
+  ::   =^  fol  rng  (rads:rng 10)
+  ::   ~&  >>>  rol
+  ::   ~&  >>  bol
+  ::   ~&  >  fol
+  ::   &
   ++  field
     |=  [word=tape i=@ud]
     ^-  manx
