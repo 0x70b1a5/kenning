@@ -54,11 +54,6 @@
             ;input(type "hidden", name "id", value (scow %ud num));
             ;br;
             ;input(type "submit", value "submit");
-            :: ;textarea
-            ::   =rows  "20"
-            ::   =cols  "40"
-            ::   ; {text.ken}
-            :: ==
           ==
         ==
         ;script: {scripts}

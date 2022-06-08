@@ -65,7 +65,7 @@
               :: ; automatic
             ==
             ;input(type "hidden", name "id", value (scow %ud num));
-            ;input(type "save", value "submit");
+            ;input(type "submit", value "save");
           ==
         ==
         ;script: {scripts}
