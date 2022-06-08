@@ -22,11 +22,8 @@
       ?:  (lth (lent words) kelvin.ken)
         1
       (max 1 (sub (lent words) kelvin.ken))
-    =+  rng=~(. og eny.bowl)
-    =^  gaps  rng  
-      %^  spin  
-        (reap blanks 0)  rng
-      |=([n=@ rng=_og] (rads:rng (lent words)))
+    =/  gaps  (get-gaps blanks (lent words))
+    ~&  >>>  gaps
     ;html
       ;head
         ;title:"ken #{(scow %ud num)}"
@@ -79,25 +76,38 @@
         =autofocus     ""
         =autocomplete  "off";
     ==
+  ++  get-gaps
+    |=  [n=@ud max=@ud]
+    ^-  (list @ud)
+    =+  rng=~(. og eny.bowl)
+    =/  range  (reap n 0)
+    =/  uniqs  `(list @ud)`~
+    |-
+    ?:  (gte (lent uniqs) n)
+      uniqs
+    =^  proposal  rng  (rads:rng max)
+    ?~  (find ~[proposal] uniqs)
+      $(uniqs (weld ~[proposal] uniqs))
+    $(uniqs uniqs)
   ++  scripts
-  ^~
-  %-  trip
-  '''
-  //alert('this works!')
-  document.addEventListener('keydown', e => {
-    console.log(e)
-    if (e.key == ' ') {
-      e.preventDefault();
-      const inputs = document.getElementsByClassName('guess');
-      for (let i in inputs) {
-        if (document.activeElement.name == inputs[i].name && +i+1 < inputs.length ) {
-          inputs[+i+1].focus();
-          break;   
+    ^~
+    %-  trip
+    '''
+    //alert('this works!')
+    document.addEventListener('keydown', e => {
+      console.log(e)
+      if (e.key == ' ') {
+        e.preventDefault();
+        const inputs = document.getElementsByClassName('guess');
+        for (let i in inputs) {
+          if (document.activeElement.name == inputs[i].name && +i+1 < inputs.length ) {
+            inputs[+i+1].focus();
+            break;   
+          }
         }
       }
-    }
-  })
-  '''
+    })
+    '''
   --
 ++  argue  :: called for POST reqs
   |=  [headers=header-list:http body=(unit octs)]
