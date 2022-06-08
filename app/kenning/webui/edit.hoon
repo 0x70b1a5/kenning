@@ -29,7 +29,7 @@
             ;div#status.red:"{(trip txt.u.msg)}"
         ;h2:"editing kenning #{(scow %ud num)}"
         ;section
-          ;a.linq/"/kenning/{(scow %ud num)}":"cancel"
+          ;a.linq/"/kenning/{(scow %ud num)}":"back"
         ==
         ;section
           ;form(method "post")
