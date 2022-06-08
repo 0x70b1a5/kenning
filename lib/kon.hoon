@@ -87,5 +87,11 @@
   .hidden {
     visibility:hidden;
   }
+  .2m {
+    width: 2em;
+  }
+  .5m {
+    width: 5em;
+  }
   '''
 --

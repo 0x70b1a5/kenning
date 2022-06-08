@@ -109,7 +109,7 @@
   ^-  $@(brief:rudder action:kenning)  :: error message, or user action
   =/  args=(map @t @t)
     ?~(body ~ (frisk:rudder q.u.body))
-  ~&  >  args
+  :: ~&  >  args
   ?.  (~(has by args) 'id')
     ~
   =/  id  (slav %ud (~(got by args) 'id'))
@@ -144,8 +144,8 @@
   =/  decapt  (decap:rudder /kenning site.ordo)
   =/  num  (head (tail decapt))
   =/  ken  (snag (slav %ud num) kennings)
-  ~&  >>>  'true'
-  ~&  >>>  ken
+  :: ~&  >>>  'true'
+  :: ~&  >>>  ken
   =/  brief  
     ?~  kelvin.ken
       ?~  brief  '0K baby! you did it!'
