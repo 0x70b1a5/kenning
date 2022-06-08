@@ -7,29 +7,32 @@
   =/  i  (find splitter original)
   ?~  i
     (snoc final original)
-  =/  initial  (scag +.i original)
-  =/  sequential  (slag +(+.i) original)
+  =/  initial  (scag (tail i) original)
+  =/  sequential  (slag (add (tail i) (lent splitter)) original)
   ?~  initial
     $(original sequential)
   =.  final  (snoc final initial)
   $(original sequential)
-++  noline  :: remove newlines
+++  noline  :: replace newlines with ace
   |=  t=tape
   ^-  tape
-  :: ~&  >  'nolining'
-  :: ~&  >  t
   |-
   =/  gaps  (find "\0d\0a" t)
   ?~  gaps
-    :: ~&  >  'done'
-    :: ~&  >  t
     t
   %=  $
     :: remove one, swap one.
     :: first oust, then snap (so we can use same index for both)
     t  (snap (oust [(tail gaps) 1] t) (tail gaps) ' ')
   ==
-  
+++  nospline
+  |=  t=tape
+  ^-  (list tape)
+  (split (noline t) " ")
+++  nospace
+  |=  t=tape
+  ^-  tape
+  (zing (split t " "))
 ++  style
   ^~
   %-  trip
@@ -62,6 +65,10 @@
   }
   .linq {
     margin: 0.5em;
+    border: none;
+    background: transparent;
+    text-decoration: underline;
+    color: blue;
   }
   textarea {
     margin: 0 1em;
@@ -70,8 +77,12 @@
     border: none;
     border-bottom: 1px solid;
   }
-  th {
+  table {
+    border-spacing: 0px;
+  }
+  th, td {
     text-align: left;
+    padding: 2px;
   }
   .hidden {
     visibility:hidden;

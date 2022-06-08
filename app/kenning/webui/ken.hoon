@@ -15,13 +15,18 @@
     =/  decapt  (decap:rudder /kenning site.ordo)
     =/  num  (slav %ud (head (tail decapt)))
     =/  ken  (snag num kennings)
-    =/  canon  (split:kon text.ken " ")
-    =/  blanks  (max 1 (sub (lent canon) kelvin.ken))
+    =/  words  (nospline:kon text.ken)
+    :: at least 1 blank
+    ::
+    =/  blanks  
+      ?:  (lth (lent words) kelvin.ken)
+        1
+      (max 1 (sub (lent words) kelvin.ken))
     =+  rng=~(. og eny.bowl)
     =^  gaps  rng  
       %^  spin  
         (reap blanks 0)  rng
-      |=([n=@ rng=_og] (rads:rng (lent canon)))
+      |=([n=@ rng=_og] (rads:rng (lent words)))
     ;html
       ;head
         ;title:"ken #{(scow %ud num)}"
@@ -35,21 +40,26 @@
               ;div#status.green:"{(trip txt.u.msg)}"
             ;div#status.red:"{(trip txt.u.msg)}"
         ;h2:"kenning #{(scow %ud num)}, {(scow %ud kelvin.ken)}K"
-        ;form(method "post")
-          ;*  ^-  marl
-              %-  head
-              %^  spin  canon  0
-              |=  [w=tape b=@ud]
-              [(field-or-word w b gaps) +(b)]
-          ;input(type "hidden", name "id", value (scow %ud num));
-          ;br;
-          ;input(type "submit", value "submit");
+        ;section
+          ;a.linq(href "/kenning"):"back"
+          ;a.linq(href "/kenning/{(scow %ud num)}/edit"):"edit"
         ==
-        ;a(href "/kenning")
-          back
-        ==
-        ;a(href "/kenning/{(scow %ud num)}/edit")
-          edit
+        ;section
+          ;form(method "post")
+            ;*  ^-  marl
+                %-  head
+                %^  spin  words  0
+                |=  [w=tape b=@ud]
+                [(field-or-word w b gaps) +(b)]
+            ;input(type "hidden", name "id", value (scow %ud num));
+            ;br;
+            ;input(type "submit", value "submit");
+            :: ;textarea
+            ::   =rows  "20"
+            ::   =cols  "40"
+            ::   ; {text.ken}
+            :: ==
+          ==
         ==
         ;script: {scripts}
       ==
@@ -57,31 +67,22 @@
   ++  field-or-word
     |=  [word=tape index=@ud gaps=(list @ud)]
     ^-  manx
-    :: ?:  (roll-blank index blanks ~(. og eny.bowl))
-    :: ?:  (lth index blanks)
     ?~  (find ~[index] gaps)
       ;span
         ; {word}
         ;input(type "hidden", name (scow %ud index), value word);
       ==
     (field word index)
-  :: ++  roll-blank
-  ::   |=  [cur=@ud max=@ud rng=_og]
-  ::   ^-  ?
-  ::   ?:  (gth cur max)
-  ::     |
-  ::   =^  rol  rng  (rads:rng 10)
-  ::   =^  bol  rng  (rads:rng 10)
-  ::   =^  fol  rng  (rads:rng 10)
-  ::   ~&  >>>  rol
-  ::   ~&  >>  bol
-  ::   ~&  >  fol
-  ::   &
   ++  field
     |=  [word=tape i=@ud]
     ^-  manx
     ;div.inline
-      ;input.guess(type "text", name (scow %ud i), placeholder "...", autofocus "", autocomplete "off");
+      ;input.guess
+        =type          "text"
+        =name          (scow %ud i)
+        =placeholder   "..."
+        =autofocus     ""
+        =autocomplete  "off";
     ==
   ++  scripts
   ^~

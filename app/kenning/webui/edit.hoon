@@ -28,43 +28,45 @@
               ;div#status.green:"{(trip txt.u.msg)}"
             ;div#status.red:"{(trip txt.u.msg)}"
         ;h2:"editing kenning #{(scow %ud num)}"
-        ;form(method "post")
-          ;div
-            ;label: ken
-            ;textarea
-                =cols           "80"
-                =rows           "40"
-                =id             "text"
-                =name           "text"
-                =placeholder    "enter your ken..."
-                =autofocus      ""
-                =autocomplete   "off"
-              ; {text.ken}
-            ==
-          ==
-          ;div
-            ;label: kelvin
-            ;input.guess
-              =id            "kelvin"
-              =type          "number"
-              =min           "0"
-              =pattern       "\\d+"
-              =name          "kelvin"
-              =placeholder   "kelvin manual override"
-              =autocomplete  "off"
-              =value         (scow %ud kelvin.ken);
-            :: ;input
-            ::   =type     "checkbox"
-            ::   =name     "autokel"
-            ::   =id     "autokel"
-            ::   =checked  "true";
-            :: ; automatic
-          ==
-          ;input(type "hidden", name "id", value (scow %ud num));
-          ;input(type "submit", value "submit");
+        ;section
+          ;a.linq/"/kenning/{(scow %ud num)}":"cancel"
         ==
-        ;a/"/kenning/{(scow %ud num)}"
-          back
+        ;section
+          ;form(method "post")
+            ;div
+              ;label: ken
+              ;textarea
+                  =cols           "40"
+                  =rows           "20"
+                  =id             "text"
+                  =name           "text"
+                  =placeholder    "enter your ken..."
+                  =autofocus      ""
+                  =autocomplete   "off"
+                ; {text.ken}
+              ==
+            ==
+            ;div
+              ;label: kelvin
+              ;input.guess
+                =id            "kelvin"
+                =type          "number"
+                =min           "0"
+                =pattern       "\\d+"
+                =name          "kelvin"
+                =placeholder   "kelvin manual override"
+                =autocomplete  "off"
+                =value         (scow %ud kelvin.ken);
+              :: ;input
+              ::   =type     "checkbox"
+              ::   =name     "autokel"
+              ::   =id     "autokel"
+              ::   =checked  "true";
+              :: ; automatic
+            ==
+            ;input(type "hidden", name "id", value (scow %ud num));
+            ;input(type "save", value "submit");
+          ==
         ==
         ;script: {scripts}
       ==

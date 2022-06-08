@@ -127,8 +127,8 @@
       :: add a text to the library
       ::
       %add
-    =/  text  (noline:kon text.action)
-    =/  splat  (split:kon text " ")
+    =/  text  text.action
+    =/  splat  (nospline:kon text)
     =/  kelvin  (lent splat)
     =/  id  (lent texts.state)
     =/  kan  [%ken id=id text=text kelvin=kelvin]
@@ -149,7 +149,8 @@
       ::
       %test
     =/  canon  (snag id.action texts.state)
-    ?:  =((split:kon text.canon " ") (split:kon assay.action " "))
+    ?:  .=  (nospline:kon (cass text.canon)) 
+        (nospline:kon (cass assay.action))
       :: on pass, dec kelvin if poss
       ?:  =(kelvin.canon 0) 
         :: if already 0, do nothing
@@ -159,7 +160,8 @@
       =.  kelvin.canon  (dec kelvin.canon) 
       (handle-action [%mod ken=canon])
     :: on fail, succ kelvin if poss
-    =.  kelvin.canon  (min (succ kelvin.canon) (lent text.canon))
+    =.  kelvin.canon  
+      (min (succ kelvin.canon) (lent (nospline:kon text.canon)))
     (handle-action [%mod ken=canon])
       :: get text by id
       ::

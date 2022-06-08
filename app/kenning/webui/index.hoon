@@ -49,7 +49,6 @@
               ==
             ;thead
               ;tr
-                ;th;
                 ;th
                   kelvin (max)
                 ==
@@ -90,26 +89,24 @@
     |=  [k=ken:kenning i=@ud]
     ;tr
       ;td
+        ;+  ?~  kelvin.k  ;span.green: {(scow %ud kelvin.k)}
+          ;span: {(scow %ud kelvin.k)}
+        ;span: /{(scow %ud (lent (nospline:kon text.k)))}
+      ==
+      ;td: {(clipper text.k 70)}
+      ;td
+        ;a.linq(href "kenning/{(scow %ud i)}"):"test"
+        ;a.linq(href "kenning/{(scow %ud i)}/edit"):"edit"
         ;form(method "post")
-          ;input(type "submit", name "del", value "x");
+          ;input.linq(type "submit", name "del", value "del");
           ;input(type "hidden", name "index", value "{(scow %ud i)}");
         ==
       ==
-      ;td
-        ;+  ?~  kelvin.k  ;span.green: {(scow %ud kelvin.k)}
-          ;span: {(scow %ud kelvin.k)}
-        ;span: /{(scow %ud (lent (split:kon text.k " ")))}
-      ==
-      ;td: {(clipper text.k)}
-      ;td
-        ;a.linq(href "kenning/{(scow %ud i)}"): test
-        ;a.linq(href "kenning/{(scow %ud i)}/edit"): edit
-      ==
     ==
   ++  clipper
-    |=  text=(list @t)
-    ?:  (gth (lent text) 140) 
-      (weld (scag 140 text) "...") 
+    |=  [text=(list @t) chars=@ud]
+    ?:  (gth (lent text) chars) 
+      (weld (scag chars text) "...") 
     text
   --
 ++  argue
