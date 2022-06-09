@@ -69,6 +69,7 @@
     background: transparent;
     text-decoration: underline;
     color: blue;
+    cursor: pointer;
   }
   textarea {
     margin: 0 1em;
@@ -87,11 +88,20 @@
   .hidden {
     visibility:hidden;
   }
-  .2m {
+  .2em {
     width: 2em;
   }
-  .5m {
+  .3em {
+    width: 3em;
+  }
+  .4em {
+    width: 4em;
+  }
+  .5em {
     width: 5em;
+  }
+  .6em {
+    width: 6em;
   }
   '''
 --

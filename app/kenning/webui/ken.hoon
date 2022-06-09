@@ -15,6 +15,7 @@
     =/  decapt  (decap:rudder /kenning site.ordo)
     =/  num  (slav %ud (head (tail decapt)))
     =/  ken  (snag num kennings)
+    :: TODO - the loop algorithm, tokenize hyphens, don't care abt punc
     =/  words  (nospline:kon text.ken)
     :: at least 1 blank
     ::
@@ -23,7 +24,7 @@
         1
       (max 1 (sub (lent words) kelvin.ken))
     =/  gaps  (get-gaps blanks (lent words))
-    ~&  >>>  gaps
+    :: ~&  >>>  gaps
     ;html
       ;head
         ;title:"ken #{(scow %ud num)}"
@@ -69,7 +70,8 @@
     |=  [word=tape i=@ud]
     ^-  manx
     ;div.inline
-      ;input.guess
+      ;input
+        =class         "guess {(scow %ud (lent word))}em"
         =type          "text"
         =name          (scow %ud i)
         =placeholder   "..."
@@ -107,6 +109,10 @@
         }
       }
     })
+
+    //  TODO
+    // localstorage: find latest kelvin
+    //   use that to show if user advanced or fell back
     '''
   --
 ++  argue  :: called for POST reqs

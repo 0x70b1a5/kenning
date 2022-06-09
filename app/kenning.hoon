@@ -124,45 +124,6 @@
   |=  =action:kenning
   ^-  (quip card _state)
   ?-    -.action
-      :: add a text to the library
-      ::
-      %add
-    =/  text  text.action
-    =/  splat  (nospline:kon text)
-    =/  kelvin  (lent splat)
-    =/  id  (lent texts.state)
-    =/  kan  [%ken id=id text=text kelvin=kelvin]
-    ?~  (lent texts.state)
-      =.  texts.state  (weld texts.state ~[kan])
-      :_  state
-      ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-    ?:  %-  lien  :: don't add dupes
-          :-  texts.state
-          |=  kon=[@tas id=@ud text=tape kelvin=@ud]
-          =(text.kan text.kon)
-      :_  state
-      ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-    =.  texts.state  (weld texts.state ~[kan])
-    :_  state
-    ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-      :: check your memorized text against the real one 
-      ::
-      %test
-    =/  canon  (snag id.action texts.state)
-    ?:  .=  (nospline:kon (cass text.canon)) 
-        (nospline:kon (cass assay.action))
-      :: on pass, dec kelvin if poss
-      ?:  =(kelvin.canon 0) 
-        :: if already 0, do nothing
-        :_  state
-        ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
-      :: set state to have lower kelvin for our text
-      =.  kelvin.canon  (dec kelvin.canon) 
-      (handle-action [%mod ken=canon])
-    :: on fail, succ kelvin if poss
-    =.  kelvin.canon  
-      (min (succ kelvin.canon) (lent (nospline:kon text.canon)))
-    (handle-action [%mod ken=canon])
       :: get text by id
       ::
       %get
@@ -183,6 +144,46 @@
       ::
       %mod
     =.  texts.state  (snap texts.state id.ken.action ken.action)
+    :_  state
+    ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+      :: check your memorized text against the real one 
+      ::
+      %test
+    =/  canon  (snag id.action texts.state)
+    :: TODO ignore punctuation
+    ?:  .=  (nospline:kon (cass text.canon)) 
+        (nospline:kon (cass assay.action))
+      :: on pass, dec kelvin if poss
+      ?:  =(kelvin.canon 0) 
+        :: if already 0, do nothing
+        :_  state
+        ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+      :: set state to have lower kelvin for our text
+      =.  kelvin.canon  (dec kelvin.canon) 
+      (handle-action [%mod ken=canon])
+    :: on fail, succ kelvin if poss
+    =.  kelvin.canon  
+      (min (succ kelvin.canon) (lent (nospline:kon text.canon)))
+    (handle-action [%mod ken=canon])
+      :: add a text to the library
+      ::
+      %add
+    =/  text  text.action
+    =/  splat  (nospline:kon text)
+    =/  kelvin  (lent splat)
+    =/  id  (lent texts.state)
+    =/  kan  [%ken id=id text=text kelvin=kelvin]
+    ?~  (lent texts.state)
+      =.  texts.state  (weld texts.state ~[kan])
+      :_  state
+      ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+    ?:  %-  lien  :: don't add dupes
+          :-  texts.state
+          |=  kon=[@tas id=@ud text=tape kelvin=@ud]
+          =(text.kan text.kon)
+      :_  state
+      ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+    =.  texts.state  (weld texts.state ~[kan])
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
   ==
