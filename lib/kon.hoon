@@ -114,7 +114,7 @@
   .w6 {
     width: 6em;
   }
-  .arrow { 
+  #arrow { 
     font-size: 0.7em;
   }
   .red { 

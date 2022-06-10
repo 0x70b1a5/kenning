@@ -153,10 +153,7 @@
     :: TODO ignore punctuation
     =/  answer  (nospline:kon (nopun:kon (cass text.canon)))
     =/  submis  (nospline:kon (nopun:kon (cass assay.action)))
-    ~&  >  answer
-    ~&  >>  submis
     ?:  .=  answer  submis
-        
       :: on pass, dec kelvin if poss
       ?:  =(kelvin.canon 0) 
         :: if already 0, do nothing
