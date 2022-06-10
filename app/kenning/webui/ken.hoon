@@ -67,6 +67,8 @@
   ++  field-or-word
     |=  [word=tape index=@ud gaps=(list @ud)]
     ^-  manx
+    ?~  word
+      ;span;
     ?~  (find ~[index] gaps)
       ;span
         ; {word}
@@ -114,6 +116,7 @@
       }
       for (let i in anpats) {
         if (+i && !anpats[i].value) {
+      debugger;
           e.preventDefault();
           anpats[i].classList.add('red');
           anpats[i].focus();
