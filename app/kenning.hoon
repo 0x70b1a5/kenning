@@ -151,8 +151,12 @@
       %test
     =/  canon  (snag id.action texts.state)
     :: TODO ignore punctuation
-    ?:  .=  (nospline:kon (cass text.canon)) 
-        (nospline:kon (cass assay.action))
+    =/  answer  (nospline:kon (nopun:kon (cass text.canon)))
+    =/  submis  (nospline:kon (nopun:kon (cass assay.action)))
+    ~&  >  answer
+    ~&  >>  submis
+    ?:  .=  answer  submis
+        
       :: on pass, dec kelvin if poss
       ?:  =(kelvin.canon 0) 
         :: if already 0, do nothing

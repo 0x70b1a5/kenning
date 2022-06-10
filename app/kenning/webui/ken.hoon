@@ -37,13 +37,20 @@
             ?:  gud.u.msg
               ;div#status.green:"{(trip txt.u.msg)}"
             ;div#status.red:"{(trip txt.u.msg)}"
-        ;h2:"kenning #{(scow %ud num)}, {(scow %ud kelvin.ken)}K"
+        ;h2
+          ;span:"kenning #"
+          ;span#kid:"{(scow %ud num)}"
+          ; , 
+          ;span#k:"{(scow %ud kelvin.ken)}"
+          ; K
+          ;span#arrow;
+        ==
         ;section
           ;a.linq(href "/kenning"):"back"
           ;a.linq(href "/kenning/{(scow %ud num)}/edit"):"edit"
         ==
         ;section
-          ;form(method "post")
+          ;form(id "test", method "post")
             ;*  ^-  marl
                 %-  head
                 %^  spin  words  0
@@ -71,7 +78,7 @@
     ^-  manx
     ;div.inline
       ;input
-        =class         "guess {(scow %ud (lent word))}em"
+        =class         "guess w{(scow %ud (lent word))}"
         =type          "text"
         =name          (scow %ud i)
         =placeholder   "..."
@@ -96,8 +103,25 @@
     %-  trip
     '''
     //alert('this works!')
+    const form = document.getElementById('test');
+    form.addEventListener('submit', e => {
+      const inputs = document.getElementsByTagName('input');
+      const anpats = [];
+      for (let i in inputs) {
+        // do it backwards, with unshift
+        //   so that below, we always focus the first empty
+        if (+i) anpats.unshift(inputs[i]);
+      }
+      for (let i in anpats) {
+        if (+i && !anpats[i].value) {
+          e.preventDefault();
+          anpats[i].classList.add('red');
+          anpats[i].focus();
+        }
+      }
+    });
+
     document.addEventListener('keydown', e => {
-      console.log(e)
       if (e.key == ' ') {
         e.preventDefault();
         const inputs = document.getElementsByClassName('guess');
@@ -110,9 +134,22 @@
       }
     })
 
-    //  TODO
     // localstorage: find latest kelvin
     //   use that to show if user advanced or fell back
+    const kenId = document.getElementById('kid').innerText;
+    const lastK = +localStorage.getItem('_kenning_lastK_'+kenId);
+    const currK = +document.getElementById('k').innerText;
+    if (!isNaN(lastK)) {
+      if (!isNaN(currK)) {
+        const wentDown = lastK < currK;
+        const noChange = lastK == currK && lastK != 0;
+
+        document.getElementById('arrow').innerText = wentDown ?
+          "❌" : noChange ? "" : "✅";
+      }
+    }
+    localStorage.setItem('_kenning_lastK_'+kenId, currK);
+
     '''
   --
 ++  argue  :: called for POST reqs

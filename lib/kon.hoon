@@ -25,6 +25,14 @@
     :: first oust, then snap (so we can use same index for both)
     t  (snap (oust [(tail gaps) 1] t) (tail gaps) ' ')
   ==
+++  nopun
+  |=  t=tape
+  ^-  tape
+  %+  skip  t
+  |=  u=@ta
+  =(~ (find (trip u) alphanum))
+++  alphanum
+  "abcdefghijklmnopqrstuvwxyz0123456789"
 ++  nospline
   |=  t=tape
   ^-  (list tape)
@@ -88,20 +96,34 @@
   .hidden {
     visibility:hidden;
   }
-  .2em {
+  .w1 {
+    width: 1em;
+  }
+  .w2 {
     width: 2em;
   }
-  .3em {
+  .w3 {
     width: 3em;
   }
-  .4em {
+  .w4 {
     width: 4em;
   }
-  .5em {
+  .w5 {
     width: 5em;
   }
-  .6em {
+  .w6 {
     width: 6em;
+  }
+  .arrow { 
+    font-size: 0.7em;
+  }
+  .red { 
+    outline: 2px solid red;
+    border-radius: 3px;
+  }
+  #test {
+    margin-left: 2em;
+    max-width: 800px;
   }
   '''
 --
