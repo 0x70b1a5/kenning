@@ -5,7 +5,7 @@
   site+/kenning
   image+'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Voiced_dental_fricative_%28vector%29.svg/1920px-Voiced_dental_fricative_%28vector%29.svg.png'
   base+'kenning'
-  version+[0 0 4]
+  version+[0 0 5]
   license+'MIT'
   website+'https://example.com'
 ==
