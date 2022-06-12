@@ -91,9 +91,9 @@
       ;td
         ;+  ?~  kelvin.k  ;span.green: {(scow %ud kelvin.k)}
           ;span: {(scow %ud kelvin.k)}
-        ;span: /{(scow %ud (lent (nospline:kon text.k)))}
+        ;span: /{(scow %ud (lent (nospline:kon (tap:kon text.k))))}
       ==
-      ;td: {(clipper text.k 70)}
+      ;td: {(clipper (tap:kon text.k) 70)}
       ;td
         ;a.linq(href "kenning/{(scow %ud i)}"):"test"
         ;a.linq(href "kenning/{(scow %ud i)}/edit"):"edit"
@@ -116,12 +116,12 @@
     ?~(body ~ (frisk:rudder q.u.body))
   ?:  &((~(has by args) 'add') (~(has by args) 'ken'))
     [%add text=(trip (~(got by args) 'ken'))]
-  ?:  (~(has by args) 'browse')
-    [%browse ~]
-  ?:  &((~(has by args) 'get') (~(has by args) 'id'))
-    [%get id=`@ud`(~(got by args) 'id')]
-  ?:  &((~(has by args) 'test') (~(has by args) 'id') (~(has by args) 'assay'))
-    [%test id=`@ud`(~(got by args) 'id') assay=(trip (~(got by args) 'assay'))]
+  :: ?:  (~(has by args) 'browse')
+  ::   [%browse ~]
+  :: ?:  &((~(has by args) 'get') (~(has by args) 'id'))
+  ::   [%get id=`@ud`(~(got by args) 'id')]
+  :: ?:  &((~(has by args) 'test') (~(has by args) 'id') (~(has by args) 'assay'))
+  ::   [%test id=`@ud`(~(got by args) 'id') assay=(trip (~(got by args) 'assay'))]
   ?.  &((~(has by args) 'del') (~(has by args) 'index'))
     ~
   ?~  ind=(rush (~(got by args) 'index') dem:ag)

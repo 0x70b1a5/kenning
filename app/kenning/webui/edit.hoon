@@ -43,7 +43,7 @@
                   =placeholder    "enter your ken..."
                   =autofocus      ""
                   =autocomplete   "off"
-                ; {text.ken}
+                ; {(tap:kon text.ken)}
               ==
             ==
             ;div
@@ -109,7 +109,7 @@
   =/  kelmax  (lent (split:kon text " "))
   ?:  (gth kelvin kelmax)
     (crip "maximum kelvin value for this ken is {(scow %ud kelmax)}")
-  [%mod ken=[%ken id=id text=text kelvin=kelvin]]
+  [%mod ken=[%ken id=id text=(kap:kon text) kelvin=kelvin]]
 ++  final
   ::  success=%.y if both +argue and +solve succeeded
   ::  brief might have a status message

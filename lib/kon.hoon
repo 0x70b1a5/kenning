@@ -1,3 +1,4 @@
+/-  kenning
 |%
 ++  split  :: Split a cord recursively
   |=  [original=tape splitter=tape]
@@ -41,6 +42,55 @@
   |=  t=tape
   ^-  tape
   (zing (split t " "))
+++  tap
+  |=  t=kext:kenning
+  ^-  tape
+  (turn t taper)
+++  taper
+  |=  c=khar:kenning
+  ^-  @t
+  ?@  c
+    c
+  ?-  -.c
+      %ace
+    ' '
+      %gap
+    '\0d\0a'
+      %hep
+    '-'
+  ==
+++  kap
+  |=  t=tape
+  ^-  kext:kenning
+  =/  turnt  (turn t kaper)
+  =/  kaxt  `kext:kenning`~
+  =/  i  0
+  =/  store  ""
+  |-
+  :: ~&  >  i
+  :: ~&  >  (lent turnt)
+  :: ~&  >>  ith
+  :: ~&  >>>  store
+  ?:  (gte i (lent turnt))
+    kaxt
+  =/  ith  (snag i turnt)
+  ?@  ith
+    $(store (weld store (trip ith)), i +(i))
+  %=  $
+    kaxt   (weld kaxt ~[`khar:kenning`(crip store) `khar:kenning`ith])
+    i      +(i)
+    store  ""
+  ==
+++  kaper
+  |=  c=@t
+  ^-  khar:kenning
+  ?:  =(c ' ')
+    ace+~
+  ?:  !=(~ (find ~[c] "\0d\0a"))
+    gap+~
+  ?:  =(c '-')
+    hep+~
+  c
 ++  style
   ^~
   %-  trip

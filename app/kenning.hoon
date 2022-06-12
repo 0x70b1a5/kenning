@@ -132,6 +132,7 @@
       :: see all texts
       ::
       %browse
+      ~&  texts.state
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
       :: delete
@@ -150,9 +151,8 @@
       ::
       %test
     =/  canon  (snag id.action texts.state)
-    :: TODO ignore punctuation
-    =/  answer  (nospline:kon (nopun:kon (cass text.canon)))
-    =/  submis  (nospline:kon (nopun:kon (cass assay.action)))
+    =/  answer  (nospline:kon (nopun:kon (cass (tap:kon text.canon))))
+    =/  submis  (nospline:kon (nopun:kon (cass (tap:kon assay.action))))
     ?:  .=  answer  submis
       :: on pass, dec kelvin if poss
       ?:  =(kelvin.canon 0) 
@@ -164,7 +164,7 @@
       (handle-action [%mod ken=canon])
     :: on fail, succ kelvin if poss
     =.  kelvin.canon  
-      (min (succ kelvin.canon) (lent (nospline:kon text.canon)))
+      (min (succ kelvin.canon) (lent (nospline:kon (tap:kon text.canon))))
     (handle-action [%mod ken=canon])
       :: add a text to the library
       ::
@@ -173,14 +173,14 @@
     =/  splat  (nospline:kon text)
     =/  kelvin  (lent splat)
     =/  id  (lent texts.state)
-    =/  kan  [%ken id=id text=text kelvin=kelvin]
+    =/  kan  [%ken id=id text=(kap:kon text) kelvin=kelvin]
     ?~  (lent texts.state)
       =.  texts.state  (weld texts.state ~[kan])
       :_  state
       ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
     ?:  %-  lien  :: don't add dupes
           :-  texts.state
-          |=  kon=[@tas id=@ud text=tape kelvin=@ud]
+          |=  kon=[@tas id=@ud text=kext:kenning kelvin=@ud]
           =(text.kan text.kon)
       :_  state
       ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]

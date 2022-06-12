@@ -15,8 +15,7 @@
     =/  decapt  (decap:rudder /kenning site.ordo)
     =/  num  (slav %ud (head (tail decapt)))
     =/  ken  (snag num kennings)
-    :: TODO - the loop algorithm, tokenize hyphens, don't care abt punc
-    =/  words  (nospline:kon text.ken)
+    =/  words  (nospline:kon (tap:kon text.ken))
     :: at least 1 blank
     ::
     =/  blanks  
@@ -53,9 +52,14 @@
           ;form(id "test", method "post")
             ;*  ^-  marl
                 %-  head
-                %^  spin  words  0
-                |=  [w=tape b=@ud]
-                [(field-or-word w b gaps) +(b)]
+                %^  spin  text.ken  0
+                |=  [w=khar:kenning b=@ud]
+                ?@  w  [(field-or-word w b gaps) +(b)]
+                ?-  -.w  
+                  %ace  [;span; b]
+                  %gap  [;br; b]
+                  %hep  [;span:"-" b]
+                ==
             ;input(type "hidden", name "id", value (scow %ud num));
             ;br;
             ;input(type "submit", value "submit");
@@ -65,22 +69,22 @@
       ==
     ==
   ++  field-or-word
-    |=  [word=tape index=@ud gaps=(list @ud)]
+    |=  [word=@t index=@ud gaps=(list @ud)]
     ^-  manx
     ?~  word
       ;span;
     ?~  (find ~[index] gaps)
       ;span
-        ; {word}
-        ;input(type "hidden", name (scow %ud index), value word);
+        ; {(trip word)}
+        ;input(type "hidden", name (scow %ud index), value (trip word));
       ==
     (field word index)
   ++  field
-    |=  [word=tape i=@ud]
+    |=  [word=@t i=@ud]
     ^-  manx
     ;div.inline
       ;input
-        =class         "guess w{(scow %ud (lent word))}"
+        =class         "guess w{(scow %ud (lent (trip word)))}"
         =type          "text"
         =name          (scow %ud i)
         =placeholder   "..."
@@ -116,7 +120,6 @@
       }
       for (let i in anpats) {
         if (+i && !anpats[i].value) {
-      debugger;
           e.preventDefault();
           anpats[i].classList.add('red');
           anpats[i].focus();
@@ -166,14 +169,14 @@
   =/  id  (slav %ud (~(got by args) 'id'))
   ?:  (gte id (lent kennings))
     ~
-  =/  canon  text:(snag id kennings)
+  :: =/  canon  text:(snag id kennings)
   =/  assay  ""
   =/  i=@ud  0
   :: build the tape representing our submission
   |-  
   =/  j  (crip (scow %ud i))
   ?.  &((~(has by args) j) !=(~ (~(got by args) j)))
-    [%test id=id assay=assay] 
+    [%test id=id assay=(kap:kon assay)] 
   =/  word  (trip (~(got by args) j))
   =/  next  ?~  word  ""  
     ?.  (~(has by args) (crip (scow %ud +(i))))  word
