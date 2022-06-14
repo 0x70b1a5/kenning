@@ -60,7 +60,7 @@
                 ?-  -.w  
                   %ace  [;x; b]
                   %gap  [;br; b]
-                  %hep  [;span:"-" b]
+                  %hep  [;span.hep:"-" b]
                 ==
             ;input(type "hidden", name "id", value (scow %ud num));
             ;br;

@@ -211,5 +211,8 @@
   label {
     margin-right: 2em;
   }
+  .hep {
+    margin-left: -0.7em;
+  }
   '''
 --
