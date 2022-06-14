@@ -87,14 +87,14 @@
     ==
   ++  kenner
     |=  [k=ken:kenning i=@ud]
-    ;tr
+    ;tr.ken
       ;td
         ;+  ?~  kelvin.k  ;span.green: {(scow %ud kelvin.k)}
           ;span: {(scow %ud kelvin.k)}
-        ;span: /{(scow %ud (lent (nospline:kon (tap:kon text.k))))}
+        ;span: /{(scow %ud (word-kount:kon text.k))}
       ==
       ;td: {(clipper (tap:kon text.k) 70)}
-      ;td
+      ;td.actions
         ;a.linq(href "kenning/{(scow %ud i)}"):"test"
         ;a.linq(href "kenning/{(scow %ud i)}/edit"):"edit"
         ;form(method "post")
@@ -104,7 +104,7 @@
       ==
     ==
   ++  clipper
-    |=  [text=(list @t) chars=@ud]
+    |=  [text=tape chars=@ud]
     ?:  (gth (lent text) chars) 
       (weld (scag chars text) "...") 
     text

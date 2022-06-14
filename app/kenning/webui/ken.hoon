@@ -15,14 +15,14 @@
     =/  decapt  (decap:rudder /kenning site.ordo)
     =/  num  (slav %ud (head (tail decapt)))
     =/  ken  (snag num kennings)
-    =/  words  (nospline:kon (tap:kon text.ken))
+    =/  kount  (word-kount:kon text.ken)
     :: at least 1 blank
     ::
     =/  blanks  
-      ?:  (lth (lent words) kelvin.ken)
+      ?:  (lth kount kelvin.ken)
         1
-      (max 1 (sub (lent words) kelvin.ken))
-    =/  gaps  (get-gaps blanks (lent words))
+      (max 1 (sub kount kelvin.ken))
+    =/  gaps  (get-gaps blanks text.ken)
     :: ~&  >>>  gaps
     ;html
       ;head
@@ -54,26 +54,26 @@
                 %-  head
                 %^  spin  text.ken  0
                 |=  [w=khar:kenning b=@ud]
-                ?@  w  [(field-or-word w b gaps) +(b)]
+                ?@  w  
+                  ?~  w  [;x; b]
+                  [(field-or-word w b gaps) +(b)]
                 ?-  -.w  
-                  %ace  [;span; b]
+                  %ace  [;x; b]
                   %gap  [;br; b]
                   %hep  [;span:"-" b]
                 ==
             ;input(type "hidden", name "id", value (scow %ud num));
             ;br;
-            ;input(type "submit", value "submit");
+            ;input(type "submit", value "submit", id "submit");
           ==
         ==
         ;script: {scripts}
       ==
     ==
   ++  field-or-word
-    |=  [word=@t index=@ud gaps=(list @ud)]
+    |=  [word=@t index=@ud gaps=(list [@tas @ud])]
     ^-  manx
-    ?~  word
-      ;span;
-    ?~  (find ~[index] gaps)
+    ?~  (find ~[[%gap index]] gaps)
       ;span
         ; {(trip word)}
         ;input(type "hidden", name (scow %ud index), value (trip word));
@@ -87,23 +87,35 @@
         =class         "guess w{(scow %ud (lent (trip word)))}"
         =type          "text"
         =name          (scow %ud i)
-        =placeholder   "..."
+        :: =placeholder   "..."
         =autofocus     ""
         =autocomplete  "off";
     ==
   ++  get-gaps
-    |=  [n=@ud max=@ud]
-    ^-  (list @ud)
+    |=  [n=@ud orig=kext:kenning]
+    ^-  (list [@tas @ud])
+    =/  max  (word-kount:kon orig)
     =+  rng=~(. og eny.bowl)
     =/  range  (reap n 0)
-    =/  uniqs  `(list @ud)`~
+    =/  uniqs  `(list [@tas @ud])`~
+    =/  i  0
+    :: ~&  >>>  max
+    :: ~&  >>>  n
     |-
+    ?:  (gte i 10.000) :: don't infinite
+      uniqs
+    =.  i  +(i)
     ?:  (gte (lent uniqs) n)
       uniqs
     =^  proposal  rng  (rads:rng max)
-    ?~  (find ~[proposal] uniqs)
-      $(uniqs (weld ~[proposal] uniqs))
-    $(uniqs uniqs)
+    :: ~&  >>  proposal
+    ?~  (find ~[[%gap proposal]] uniqs) :: if it's unique
+      =/  k  (snag proposal (kwords:kon orig))
+      :: ~&  >  (snag proposal orig)
+      ?~  k  $(uniqs uniqs) :: khar is null in kext - try again
+      ?^  k  $(uniqs uniqs) :: khar is a non-text token - try again
+      $(uniqs (weld ~[[%gap proposal]] uniqs))
+    $(uniqs uniqs) :: khar is not unique - try again
   ++  scripts
     ^~
     %-  trip
@@ -116,7 +128,7 @@
       for (let i in inputs) {
         // do it backwards, with unshift
         //   so that below, we always focus the first empty
-        if (+i) anpats.unshift(inputs[i]);
+        if (+i || ((+i) === 0)) anpats.unshift(inputs[i]);
       }
       for (let i in anpats) {
         if (+i && !anpats[i].value) {
@@ -128,6 +140,7 @@
     });
 
     document.addEventListener('keydown', e => {
+      // console.log(e);
       if (e.key == ' ') {
         e.preventDefault();
         const inputs = document.getElementsByClassName('guess');
@@ -136,6 +149,20 @@
             inputs[+i+1].focus();
             break;   
           }
+        }
+      }
+
+      if (e.key == 'Backspace') {
+        const inputs = document.getElementsByClassName('guess');
+        let lastInput = inputs[0];
+        for (let i in inputs) {
+          if (document.activeElement.name == inputs[i].name
+            && document.activeElement.value == '') {
+            e.preventDefault();
+            lastInput.focus();
+            break;   
+          }
+          lastInput = inputs[i];
         }
       }
     })
@@ -169,18 +196,22 @@
   =/  id  (slav %ud (~(got by args) 'id'))
   ?:  (gte id (lent kennings))
     ~
-  :: =/  canon  text:(snag id kennings)
+  =/  canon  text:(snag id kennings)
+  =/  max    (lent canon)
   =/  assay  ""
   =/  i=@ud  0
   :: build the tape representing our submission
   |-  
   =/  j  (crip (scow %ud i))
-  ?.  &((~(has by args) j) !=(~ (~(got by args) j)))
+  :: ~&  >>  j
+  ?:  (gte i max)
     [%test id=id assay=(kap:kon assay)] 
+  ?.  (~(has by args) j)
+    $(i +(i))
   =/  word  (trip (~(got by args) j))
-  =/  next  ?~  word  ""  
-    ?.  (~(has by args) (crip (scow %ud +(i))))  word
-      (weld word " ")
+  =/  next  (weld word " ")
+  :: ~&  >>>  assay
+  :: ~&  >>>  next
   %=  $
     assay  (weld assay next)
     i      +(i)

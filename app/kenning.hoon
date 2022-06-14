@@ -150,30 +150,39 @@
       :: check your memorized text against the real one 
       ::
       %test
-    =/  canon  (snag id.action texts.state)
-    =/  answer  (nospline:kon (nopun:kon (cass (tap:kon text.canon))))
-    =/  submis  (nospline:kon (nopun:kon (cass (tap:kon assay.action))))
+    =/  canon   (snag id.action texts.state)
+    =/  answer  (turn (kwords:kon text.canon) nopun:kon)
+    =/  submis  (turn (kwords:kon assay.action) nopun:kon)
+    :: ~&  >  text.canon
+    :: ~&  >>  assay.action
+    :: ~&  >  answer
+    :: ~&  >>  submis
+    :: ~&  >  (lent answer)
+    :: ~&  >>  (lent submis)
     ?:  .=  answer  submis
       :: on pass, dec kelvin if poss
       ?:  =(kelvin.canon 0) 
         :: if already 0, do nothing
+        :: ~&  >  'kel not decrememnted'
         :_  state
         ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
       :: set state to have lower kelvin for our text
+      :: ~&  >  'kel decrememnted'
       =.  kelvin.canon  (dec kelvin.canon) 
       (handle-action [%mod ken=canon])
     :: on fail, succ kelvin if poss
+    :: ~&  >  'kel incrememnted'
     =.  kelvin.canon  
-      (min (succ kelvin.canon) (lent (nospline:kon (tap:kon text.canon))))
+      (min (succ kelvin.canon) (word-kount:kon text.canon))
     (handle-action [%mod ken=canon])
       :: add a text to the library
       ::
       %add
     =/  text  text.action
-    =/  splat  (nospline:kon text)
-    =/  kelvin  (lent splat)
+    =/  kelvin  (word-count:kon text)
     =/  id  (lent texts.state)
     =/  kan  [%ken id=id text=(kap:kon text) kelvin=kelvin]
+    :: ~&  >>>  kan
     ?~  (lent texts.state)
       =.  texts.state  (weld texts.state ~[kan])
       :_  state

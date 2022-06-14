@@ -19,6 +19,7 @@
   ^-  tape
   |-
   =/  gaps  (find "\0d\0a" t)
+  :: ~&  >  t
   ?~  gaps
     t
   %=  $
@@ -27,11 +28,14 @@
     t  (snap (oust [(tail gaps) 1] t) (tail gaps) ' ')
   ==
 ++  nopun
-  |=  t=tape
-  ^-  tape
-  %+  skip  t
-  |=  u=@ta
-  =(~ (find (trip u) alphanum))
+  |=  c=khar:kenning
+  ^-  @t
+  ?^  c  ''
+  %-  crip
+  %-  cass
+  %+  skip  (trip c)
+  |=  u=@t
+  =(~ (find (cass (trip u)) alphanum))
 ++  alphanum
   "abcdefghijklmnopqrstuvwxyz0123456789"
 ++  nospline
@@ -42,22 +46,47 @@
   |=  t=tape
   ^-  tape
   (zing (split t " "))
+++  word-count
+  |=  t=tape
+  ^-  @
+  (word-kount (kap t))
+++  word-kount
+  |=  k=kext:kenning
+  ^-  @
+  (lent (kwords k))
+++  kwords
+  |=  k=kext:kenning
+  %+  skim  k
+  |=  car=khar:kenning
+  ?@  car  
+    !=(car ~)
+  |
+++  remove-sigs
+  |=  t=tape
+  %+  skim  t
+  |=  c=@t
+  .=  ~  c
 ++  tap
-  |=  t=kext:kenning
+  |=  k=kext:kenning
   ^-  tape
-  (turn t taper)
-++  taper
-  |=  c=khar:kenning
-  ^-  @t
-  ?@  c
-    c
+  =/  store  ""
+  =/  i  0
+  |-
+  ?:  (gte i (lent k))
+    :: ~&  >  store
+    store
+  =/  c  (snag i k)
+  ?~  c
+    $(i +(i))
+  ?@  c  
+    $(store (weld store (trip c)), i +(i))
   ?-  -.c
       %ace
-    ' '
+    $(store (weld store " "), i +(i))
       %gap
-    '\0d\0a'
+    $(store (weld store "\0d\0a"), i +(i))
       %hep
-    '-'
+    $(store (weld store "-"), i +(i))
   ==
 ++  kap
   |=  t=tape
@@ -72,7 +101,7 @@
   :: ~&  >>  ith
   :: ~&  >>>  store
   ?:  (gte i (lent turnt))
-    kaxt
+    (weld kaxt ~[`khar:kenning`(crip store)])
   =/  ith  (snag i turnt)
   ?@  ith
     $(store (weld store (trip ith)), i +(i))
@@ -99,6 +128,9 @@
     box-sizing: border-box;
     font-family: monospace;
   }
+  body {
+    max-width: 1000px;
+  }
   .red { 
     font-weight: bold;
     color: #dd2222; 
@@ -116,7 +148,7 @@
     display: inline-block;
   }
   .guess {
-    margin: 0.5em 1em;
+    margin-right: 0.7em;
     border: none;
     border-bottom: 1px solid;
     width: 10em;
@@ -138,6 +170,7 @@
   }
   table {
     border-spacing: 0px;
+    table-layout: fixed;
   }
   th, td {
     text-align: left;
@@ -164,6 +197,18 @@
   .w6 {
     width: 6em;
   }
+  .w7 {
+    width: 7em;
+  }
+  .w8 {
+    width: 8em;
+  }
+  .w9 {
+    width: 9em;
+  }
+  .w10 {
+    width: 10em;
+  }
   #arrow { 
     font-size: 0.7em;
   }
@@ -172,8 +217,14 @@
     border-radius: 3px;
   }
   #test {
-    margin-left: 2em;
+    margin: 1em 2em;
     max-width: 800px;
+  }
+  #submit {
+    margin-top: 1em;
+  }
+  label {
+    margin-right: 2em;
   }
   '''
 --

@@ -46,6 +46,7 @@
                 ; {(tap:kon text.ken)}
               ==
             ==
+            ;br;
             ;div
               ;label: kelvin
               ;input.guess
@@ -80,7 +81,7 @@
 
   text.addEventListener('keyup', e => {
     const newk = e.target.value
-      .replace(/\s+/g, ' ')
+      .replace(/(\s|-)+/g, ' ')
       .trim()
       .split(' ')
       .length;
@@ -94,7 +95,7 @@
   ^-  $@(brief:rudder action:kenning)  :: error message, or user action
   =/  args=(map @t @t)
     ?~(body ~ (frisk:rudder q.u.body))
-  ~&  >  args
+  :: ~&  >  args
   ?.  ?&  (~(has by args) 'id') 
           (~(has by args) 'kelvin') 
           (~(has by args) 'text')
@@ -103,13 +104,12 @@
   =/  id      (slav %ud (~(got by args) 'id'))
   ?:  (gte id (lent kennings))
     (crip "id {(scow %ud id)} is not valid")
-  =/  text  (noline:kon (trip (~(got by args) 'text')))
-  ~&  >>>  text
+  =/  text  (kap:kon (trip (~(got by args) 'text')))
   =/  kelvin  (slav %ud (~(got by args) 'kelvin'))
-  =/  kelmax  (lent (split:kon text " "))
+  =/  kelmax  (word-kount:kon text)
   ?:  (gth kelvin kelmax)
     (crip "maximum kelvin value for this ken is {(scow %ud kelmax)}")
-  [%mod ken=[%ken id=id text=(kap:kon text) kelvin=kelvin]]
+  [%mod ken=[%ken id=id text=text kelvin=kelvin]]
 ++  final
   ::  success=%.y if both +argue and +solve succeeded
   ::  brief might have a status message
