@@ -91,35 +91,20 @@
 ++  kap
   |=  t=tape
   ^-  kext:kenning
-  =/  turnt  (turn t kaper)
   =/  kaxt  `kext:kenning`~
   =/  i  0
   =/  store  ""
   |-
-  :: ~&  >  i
-  :: ~&  >  (lent turnt)
-  :: ~&  >>  ith
-  :: ~&  >>>  store
-  ?:  (gte i (lent turnt))
+  ?:  (gte i (lent t))
     (weld kaxt ~[`khar:kenning`(crip store)])
-  =/  ith  (snag i turnt)
-  ?@  ith
-    $(store (weld store (trip ith)), i +(i))
-  %=  $
-    kaxt   (weld kaxt ~[`khar:kenning`(crip store) `khar:kenning`ith])
-    i      +(i)
-    store  ""
-  ==
-++  kaper
-  |=  c=@t
-  ^-  khar:kenning
-  ?:  =(c ' ')
-    ace+~
-  ?:  !=(~ (find ~[c] "\0d\0a"))
-    gap+~
-  ?:  =(c '-')
-    hep+~
-  c
+  =/  ith  (snag i t)
+  ?:  =(ith ' ')
+    $(kaxt (weld kaxt ~[`khar:kenning`(crip store) ace+~]), i +(i), store "")
+  ?:  =(ith '-')
+    $(kaxt (weld kaxt ~[`khar:kenning`(crip store) hep+~]), i +(i), store "")
+  ?:  |(=(ith '\0d') =(ith '\0a')) :: '\0a' always follows - skip it
+    $(kaxt (weld kaxt ~[`khar:kenning`(crip store) gap+~]), i +(+(i)), store "")
+  $(store (weld store (trip ith)), i +(i))
 ++  style
   ^~
   %-  trip

@@ -15,6 +15,7 @@
     =/  decapt  (decap:rudder /kenning site.ordo)
     =/  num  (slav %ud (head (tail decapt)))
     =/  ken  (snag num kennings)
+    ~&  >>>  ken
     ;html
       ;head
         ;title:"edit ken #{(scow %ud num)}"
@@ -95,7 +96,7 @@
   ^-  $@(brief:rudder action:kenning)  :: error message, or user action
   =/  args=(map @t @t)
     ?~(body ~ (frisk:rudder q.u.body))
-  :: ~&  >  args
+  ~&  >  args
   ?.  ?&  (~(has by args) 'id') 
           (~(has by args) 'kelvin') 
           (~(has by args) 'text')
@@ -105,6 +106,7 @@
   ?:  (gte id (lent kennings))
     (crip "id {(scow %ud id)} is not valid")
   =/  text  (kap:kon (trip (~(got by args) 'text')))
+  ~&  >>  text
   =/  kelvin  (slav %ud (~(got by args) 'kelvin'))
   =/  kelmax  (word-kount:kon text)
   ?:  (gth kelvin kelmax)
