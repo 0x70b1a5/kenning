@@ -111,7 +111,7 @@
   =/  kelmax  (word-kount:kon text)
   ?:  (gth kelvin kelmax)
     (crip "maximum kelvin value for this ken is {(scow %ud kelmax)}")
-  [%mod ken=[%ken id=id text=text kelvin=kelvin]]
+  [%mod ken=(newk:kon id text kelvin `(list @ud)`~)]
 ++  final
   ::  success=%.y if both +argue and +solve succeeded
   ::  brief might have a status message

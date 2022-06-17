@@ -105,6 +105,13 @@
   ?:  |(=(ith '\0d') =(ith '\0a')) :: '\0a' always follows - skip it
     $(kaxt (weld kaxt ~[`khar:kenning`(crip store) gap+~]), i +(+(i)), store "")
   $(store (weld store (trip ith)), i +(i))
+++  newk
+  |=  [id=@ud text=kext:kenning kelvin=@ud errors=(list @ud)]
+  ^-  ken:kenning
+  [%ken id=id text=text kelvin=kelvin errors=errors]
+++  zero-to-one
+  |=  zero=[@tas id=@ud text=kext:kenning kelvin=@ud]
+  (newk id.zero text.zero kelvin.zero `(list @ud)`~)  
 ++  style
   ^~
   %-  trip
@@ -123,6 +130,10 @@
   .green { 
     font-weight: bold; 
     color: #229922; 
+  }
+  .gold {
+    font-weight: bold;
+    color: goldenrod;
   }
   form { 
     margin: 0; 
@@ -197,7 +208,7 @@
   #arrow { 
     font-size: 0.7em;
   }
-  .red { 
+  input.red { 
     outline: 2px solid red;
     border-radius: 3px;
   }
@@ -213,6 +224,18 @@
   }
   .hep {
     margin-left: -0.7em;
+  }
+  input.gold {
+    outline: 2px solid #ffdd00;
+    border-radius: 3px;
+  }
+  .my-3 {
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+  .mx-0 {
+    margin-left: 0;
+    margin-right: 0;
   }
   '''
 --

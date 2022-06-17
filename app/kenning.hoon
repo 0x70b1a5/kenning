@@ -6,10 +6,14 @@
 |%
 +$  versioned-state
   $%  state-0
+      state-1
   ==
 ::
 +$  state-0
-  $:  [%0 texts=(list ken:kenning)]
+  $:  [%0 texts=(list ken-0:kenning)]
+  ==
++$  state-1
+  $:  [%1 texts=(list ken:kenning)]
   ==
 ::
 +$  card  card:agent:gall
@@ -17,7 +21,7 @@
 +$  eyre-id  @ta
 --
 ::
-=|  state-0
+=|  state-1
 =*  state  -
 ::
 %-  agent:dbug
@@ -33,7 +37,7 @@
 ++  on-init
   ^-  (quip card _this)
   ~&  >  '%kenning initialized successfully'
-  =.  state  [%0 *(list ken:kenning)]
+  =.  state  [%1 *(list ken:kenning)]
   :_  this
   :~  [%pass /eyre/connect %arvo %e %connect [~ /[dap.bowl]] dap.bowl]
   ==
@@ -42,8 +46,11 @@
 ++  on-load
   |=  ole=vase
   ^-  (quip card _this)
-  =/  old=state-0  !<(state-0 ole)
-  [~ this(state old)]
+  =/  old  !<(versioned-state ole)
+  ?-  -.old
+    %0  [~ this(state [%1 (turn texts.old zero-to-one:kon)])]
+    %1  [~ this(state old)]
+  ==
 ::
 ++  on-poke
   |=  [=mark =vase]
@@ -127,6 +134,7 @@
       :: get text by id
       ::
       %get
+      ~&  (snag id.action texts.state)
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
       :: see all texts
@@ -153,25 +161,21 @@
     =/  canon   (snag id.action texts.state)
     =/  answer  (turn (kwords:kon text.canon) nopun:kon)
     =/  submis  (turn (kwords:kon assay.action) nopun:kon)
-    :: ~&  >  text.canon
-    :: ~&  >>  assay.action
-    :: ~&  >  answer
-    :: ~&  >>  submis
-    :: ~&  >  (lent answer)
-    :: ~&  >>  (lent submis)
-    ?:  .=  answer  submis
+    =/  errors  (fault submis answer)
+    ?:  .=  (lent errors)  0
       :: on pass, dec kelvin if poss
+      =.  errors.canon  `(list @ud)`~
       ?:  =(kelvin.canon 0) 
         :: if already 0, do nothing
         :: ~&  >  'kel not decrememnted'
-        :_  state
-        ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
+        (handle-action [%mod ken=canon])
       :: set state to have lower kelvin for our text
       :: ~&  >  'kel decrememnted'
       =.  kelvin.canon  (dec kelvin.canon) 
       (handle-action [%mod ken=canon])
     :: on fail, succ kelvin if poss
     :: ~&  >  'kel incrememnted'
+    =.  errors.canon  errors
     =.  kelvin.canon  
       (min (succ kelvin.canon) (word-kount:kon text.canon))
     (handle-action [%mod ken=canon])
@@ -181,15 +185,14 @@
     =/  text  text.action
     =/  kelvin  (word-count:kon text)
     =/  id  (lent texts.state)
-    =/  kan  [%ken id=id text=(kap:kon text) kelvin=kelvin]
-    :: ~&  >>>  kan
+    =/  kan  (newk:kon id (kap:kon text) kelvin `(list @ud)`~)
     ?~  (lent texts.state)
       =.  texts.state  (weld texts.state ~[kan])
       :_  state
       ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
     ?:  %-  lien  :: don't add dupes
           :-  texts.state
-          |=  kon=[@tas id=@ud text=kext:kenning kelvin=@ud]
+          |=  kon=ken:kenning
           =(text.kan text.kon)
       :_  state
       ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
@@ -197,4 +200,17 @@
     :_  state
     ~[[%give %fact ~[/texts] [%atom !>(texts.state)]]]
   ==
+++  fault
+|=  [assay=(list @t) canon=(list @t)]
+^-  (list @ud)
+?:  .=  assay  canon
+  ~
+=/  errors  `(list @ud)`~
+=/  i  0
+|-  
+?:  |((gte i (lent assay)) (gte i (lent canon)))
+  errors 
+?:  .=  (snag i assay)  (snag i canon)
+  $(i +(i))
+$(errors (weld errors ~[i]), i +(i))
 --

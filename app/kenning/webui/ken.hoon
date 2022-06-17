@@ -56,7 +56,7 @@
                 |=  [w=khar:kenning b=@ud]
                 ?@  w  
                   ?~  w  [;x; b]
-                  [(field-or-word w b gaps) +(b)]
+                  [(field-or-word w b gaps errors.ken) +(b)]
                 ?-  -.w  
                   %ace  [;x; b]
                   %gap  [;br; b]
@@ -71,20 +71,22 @@
       ==
     ==
   ++  field-or-word
-    |=  [word=@t index=@ud gaps=(list [@tas @ud])]
+    |=  [word=@t index=@ud gaps=(list [@tas @ud]) errors=(list @ud)]
     ^-  manx
+    =/  error-class  ?~  (find ~[index] errors)  ~  "gold"
     ?~  (find ~[[%gap index]] gaps)
-      ;span
+      ;span(class error-class)
         ; {(trip word)}
         ;input(type "hidden", name (scow %ud index), value (trip word));
       ==
-    (field word index)
+    (field word index errors)
   ++  field
-    |=  [word=@t i=@ud]
+    |=  [word=@t i=@ud errors=(list @ud)]
     ^-  manx
-    ;div.inline
+    =/  error-class  ?~  (find ~[i] errors)  ~  "gold"
+    ;div.inline.my-3.mx-0
       ;input
-        =class         "guess w{(scow %ud (lent (trip word)))}"
+        =class         "guess w{(scow %ud (lent (trip word)))} {error-class}"
         =type          "text"
         =name          (scow %ud i)
         :: =placeholder   "..."

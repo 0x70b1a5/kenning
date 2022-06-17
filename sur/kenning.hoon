@@ -10,6 +10,9 @@
 +$  khar  $@(@t $%([%ace ~] [%gap ~] [%hep ~]))
 +$  kext  (list khar)
 +$  ken
+  $%  [%ken id=@ud text=kext kelvin=@ud errors=(list @ud)]
+  ==
++$  ken-0
   $%  [%ken id=@ud text=kext kelvin=@ud]
   ==
 +$  kennings  (list ken)
