@@ -75,7 +75,7 @@
     ^-  manx
     =/  error-class  ?~  (find ~[index] errors)  ~  "gold"
     ?~  (find ~[[%gap index]] gaps)
-      ;span(class error-class)
+      ;span(class "my-3 mx-0 {error-class}")
         ; {(trip word)}
         ;input(type "hidden", name (scow %ud index), value (trip word));
       ==
