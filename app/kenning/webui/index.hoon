@@ -35,6 +35,7 @@
             ;li: Every kenning is assigned a kelvin version based on word count. 
             ;li: You may test your knowledge by filling in the blanks.
             ;li: As kelvin decreases, the number of blanks increases.
+            ;li: For large passages, split the text into several kens for best results.
           ==
         ==
         ;main
