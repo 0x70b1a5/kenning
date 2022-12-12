@@ -35,6 +35,15 @@
         ;section
           ;form(method "post")
             ;div
+              ;label: title
+              ;input.guess
+                =id           "title"
+                =name         "title"
+                =placeholder  "title"
+                =value        title.ken;
+            ==
+            ;br;
+            ;div
               ;label: ken
               ;textarea
                   =cols           "40"
@@ -98,6 +107,7 @@
     ?~(body ~ (frisk:rudder q.u.body))
   :: ~&  >  args
   ?.  ?&  (~(has by args) 'id') 
+          (~(has by args) 'title') 
           (~(has by args) 'kelvin') 
           (~(has by args) 'text')
       ==
@@ -105,13 +115,14 @@
   =/  id      (slav %ud (~(got by args) 'id'))
   ?:  (gte id (lent kennings))
     (crip "id {(scow %ud id)} is not valid")
-  =/  text  (kap:kon (trip (~(got by args) 'text')))
+  =/  text    (kap:kon (trip (~(got by args) 'text')))
   :: ~&  >>  text
   =/  kelvin  (slav %ud (~(got by args) 'kelvin'))
+  =/  title   (trip (~(got by args) 'title'))
   =/  kelmax  (word-kount:kon text)
   ?:  (gth kelvin kelmax)
     (crip "maximum kelvin value for this ken is {(scow %ud kelmax)}")
-  [%mod ken=(newk:kon id text kelvin `(list @ud)`~)]
+  [%mod ken=(newk:kon id title text kelvin `(list @ud)`~)]
 ++  final
   ::  success=%.y if both +argue and +solve succeeded
   ::  brief might have a status message

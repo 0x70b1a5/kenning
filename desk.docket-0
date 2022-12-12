@@ -5,7 +5,7 @@
   site+/kenning
   image+'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Voiced_dental_fricative_%28vector%29.svg/1920px-Voiced_dental_fricative_%28vector%29.svg.png'
   base+'kenning'
-  version+[0 1 0]
+  version+[0 2 0]
   license+'MIT'
-  website+'https://linktr.ee/lovecrypt'
+  website+'https://github.com/0x70b1a5/kenning'
 ==

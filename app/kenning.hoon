@@ -7,13 +7,17 @@
 +$  versioned-state
   $%  state-0
       state-1
+      state-2
   ==
 ::
 +$  state-0
   $:  [%0 texts=(list ken-0:kenning)]
   ==
 +$  state-1
-  $:  [%1 texts=(list ken:kenning)]
+  $:  [%1 texts=(list ken-1:kenning)]
+  ==
++$  state-2
+  $:  [%2 texts=(list ken:kenning)]
   ==
 ::
 +$  card  card:agent:gall
@@ -37,7 +41,7 @@
 ++  on-init
   ^-  (quip card _this)
   ~&  >  '%kenning initialized successfully'
-  =.  state  [%1 *(list ken:kenning)]
+  =.  state  [%2 *(list ken:kenning)]
   :_  this
   :~  [%pass /eyre/connect %arvo %e %connect [~ /[dap.bowl]] dap.bowl]
   ==
@@ -49,7 +53,8 @@
   =/  old  !<(versioned-state ole)
   ?-  -.old
     %0  [~ this(state [%1 (turn texts.old zero-to-one:kon)])]
-    %1  [~ this(state old)]
+    %1  [~ this(state [%2 (turn texts.old one-to-two:kon)])]
+    %2  [~ this(state old)]
   ==
 ::
 ++  on-poke
@@ -162,7 +167,7 @@
     =/  answer  (turn (kwords:kon text.canon) nopun:kon)
     =/  submis  (turn (kwords:kon assay.action) nopun:kon)
     =/  errors  (fault submis answer)
-    ?:  .=  (lent errors)  0
+    ?~  (lent errors)
       :: on pass, dec kelvin if poss
       =.  errors.canon  `(list @ud)`~
       ?:  =(kelvin.canon 0) 
@@ -185,6 +190,7 @@
     =/  text  text.action
     =/  kelvin  (word-count:kon text)
     =/  id  (lent texts.state)
+    =/  title  ?~  (lent title.action)  id  title.action
     =/  kan  (newk:kon id (kap:kon text) kelvin `(list @ud)`~)
     ?~  (lent texts.state)
       =.  texts.state  (weld texts.state ~[kan])

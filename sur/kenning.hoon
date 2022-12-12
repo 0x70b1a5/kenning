@@ -1,6 +1,6 @@
 |%
 +$  action
-  $%  [%add text=tape]
+  $%  [%add text=tape title=tape]
       [%test id=@ud assay=kext]
       [%get id=@ud]
       [%browse ~]
@@ -10,6 +10,9 @@
 +$  khar  $@(@t $%([%ace ~] [%gap ~] [%hep ~]))
 +$  kext  (list khar)
 +$  ken
+  $%  [%ken id=@ud title=tape text=kext kelvin=@ud errors=(list @ud)]
+  ==
++$  ken-1
   $%  [%ken id=@ud text=kext kelvin=@ud errors=(list @ud)]
   ==
 +$  ken-0

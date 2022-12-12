@@ -51,6 +51,9 @@
             ;thead
               ;tr
                 ;th
+                  title
+                ==
+                ;th
                   kelvin (max)
                 ==
                 ;th
@@ -67,8 +70,11 @@
                   |=  [k=ken:kenning i=@ud]
                   [(kenner k i) +(i)]
               ;tr
-                ;td(colspan "3")
+                ;td(colspan "4")
                   ;form(method "post")
+                    ;input.guess
+                      =placeholder  "title"
+                      =name         "title";
                     ;textarea
                       =name         "ken"
                       =placeholder  "Add a new text to memorize..."
@@ -89,6 +95,7 @@
   ++  kenner
     |=  [k=ken:kenning i=@ud]
     ;tr.ken
+      ;td: {title.k}
       ;td
         ;+  ?~  kelvin.k  ;span.green: {(scow %ud kelvin.k)}
           ;span: {(scow %ud kelvin.k)}
@@ -115,14 +122,8 @@
   ^-  $@(brief:rudder action:kenning)
   =/  args=(map @t @t)
     ?~(body ~ (frisk:rudder q.u.body))
-  ?:  &((~(has by args) 'add') (~(has by args) 'ken'))
-    [%add text=(trip (~(got by args) 'ken'))]
-  :: ?:  (~(has by args) 'browse')
-  ::   [%browse ~]
-  :: ?:  &((~(has by args) 'get') (~(has by args) 'id'))
-  ::   [%get id=`@ud`(~(got by args) 'id')]
-  :: ?:  &((~(has by args) 'test') (~(has by args) 'id') (~(has by args) 'assay'))
-  ::   [%test id=`@ud`(~(got by args) 'id') assay=(trip (~(got by args) 'assay'))]
+  ?:  &((~(has by args) 'add') (~(has by args) 'ken') (~(has by args) 'title'))
+    [%add text=(trip (~(got by args) 'ken')) title=title]
   ?.  &((~(has by args) 'del') (~(has by args) 'index'))
     ~
   ?~  ind=(rush (~(got by args) 'index') dem:ag)

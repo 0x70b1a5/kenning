@@ -105,13 +105,20 @@
   ?:  |(=(ith '\0d') =(ith '\0a')) :: '\0a' always follows - skip it
     $(kaxt (weld kaxt ~[`khar:kenning`(crip store) gap+~]), i +(+(i)), store "")
   $(store (weld store (trip ith)), i +(i))
-++  newk
+++  newk-1
   |=  [id=@ud text=kext:kenning kelvin=@ud errors=(list @ud)]
   ^-  ken:kenning
   [%ken id=id text=text kelvin=kelvin errors=errors]
+++  newk
+  |=  [id=@ud title=tape text=kext:kenning kelvin=@ud errors=(list @ud)]
+  ^-  ken:kenning
+  [%ken id=id title=title text=text kelvin=kelvin errors=errors]
 ++  zero-to-one
   |=  zero=[@tas id=@ud text=kext:kenning kelvin=@ud]
-  (newk id.zero text.zero kelvin.zero `(list @ud)`~)  
+  (newk-1 id.zero text.zero kelvin.zero `(list @ud)`~)  
+++  one-to-two
+  |=  one=[@tas id=@ud text=kext:kenning kelvin=@ud errors=(list @ud)]
+  (newk id.one (scow %ud id.one) text.one kelvin.one errors.one)
 ++  style
   ^~
   %-  trip
