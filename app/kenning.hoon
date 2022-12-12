@@ -191,7 +191,7 @@
     =/  kelvin  (word-count:kon text)
     =/  id  (lent texts.state)
     =/  title  ?~  (lent title.action)  id  title.action
-    =/  kan  (newk:kon id (kap:kon text) kelvin `(list @ud)`~)
+    =/  kan  (newk:kon id title (kap:kon text) kelvin `(list @ud)`~)
     ?~  (lent texts.state)
       =.  texts.state  (weld texts.state ~[kan])
       :_  state
