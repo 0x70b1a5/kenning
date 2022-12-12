@@ -123,7 +123,7 @@
   =/  args=(map @t @t)
     ?~(body ~ (frisk:rudder q.u.body))
   ?:  &((~(has by args) 'add') (~(has by args) 'ken') (~(has by args) 'title'))
-    [%add text=(trip (~(got by args) 'ken')) title=title]
+    [%add text=(trip (~(got by args) 'ken')) title=(trip (~(got by args) 'title'))]
   ?.  &((~(has by args) 'del') (~(has by args) 'index'))
     ~
   ?~  ind=(rush (~(got by args) 'index') dem:ag)
