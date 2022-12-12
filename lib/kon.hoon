@@ -107,7 +107,7 @@
   $(store (weld store (trip ith)), i +(i))
 ++  newk-1
   |=  [id=@ud text=kext:kenning kelvin=@ud errors=(list @ud)]
-  ^-  ken:kenning
+  ^-  ken-1:kenning
   [%ken id=id text=text kelvin=kelvin errors=errors]
 ++  newk
   |=  [id=@ud title=tape text=kext:kenning kelvin=@ud errors=(list @ud)]
