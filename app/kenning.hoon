@@ -51,11 +51,10 @@
   |=  ole=vase
   ^-  (quip card _this)
   =/  old  !<(versioned-state ole)
-  ?-  -.old
-    %0  [~ this(state [%1 (turn texts.old zero-to-one:kon)])]
-    %1  [~ this(state [%2 (turn texts.old one-to-two:kon)])]
-    %2  [~ this(state old)]
-  ==
+  =?  old  ?=(%0 -.old)  1+(turn texts.old zero-to-one:kon)
+  =?  old  ?=(%1 -.old)  2+(turn texts.old one-to-two:kon)
+  ?>  ?=(%2 -.old)
+  [~ this(state old)]
 ::
 ++  on-poke
   |=  [=mark =vase]
